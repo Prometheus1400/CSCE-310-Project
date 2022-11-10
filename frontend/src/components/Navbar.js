@@ -10,7 +10,7 @@ function Navbar() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="static" enableColorOnDark>
                 <Toolbar>
                     {/* change to icon button use therapy logo */}
                     <Button
