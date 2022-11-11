@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 function LoginPage() {
     return (
-      <div className="App">
+      <div className="LoginPage">
         <Grid
             container
             direction="row"

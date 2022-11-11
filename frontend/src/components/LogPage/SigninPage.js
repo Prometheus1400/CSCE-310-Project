@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 function SigninPage() {
     return (
-      <div className="App">
+      <div className="SigninPage">
         <Grid
             container
             direction="row"
@@ -33,7 +33,7 @@ function SigninPage() {
                     </FormGroup>
                     <Button variant="contained">Sign Up</Button>
                     <p>Have an account? 
-                        <Link to="/login">
+                        <Link to="/">
                             <Button variant="text">Log in</Button> 
                         </Link>
                     </p>
