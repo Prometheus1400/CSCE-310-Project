@@ -7,7 +7,6 @@ import ReviewPage from "./pages/ReviewPage";
 import UserPage from "./pages/UserPage";
 
 function App() {
-
   return (
     <div className="App">
       <BrowserRouter>
