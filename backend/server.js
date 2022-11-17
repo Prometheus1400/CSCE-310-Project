@@ -56,8 +56,10 @@ app.get('/createAccount', (req, response) => {
     let email = req.query.email
     let password = req.query.password
     let phone = req.query.phone
-    let name = req.query.name
-    pool.query('INSERT INTO USERS(USER_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, ID_ADMIN) VALUES ($1, $2, $3, $4, false)', [name, email, phone, password], (err, res) => {
+    let fname = req.query.fname
+    let lname = req.query.lname
+    let isTherapist = req.query.isTherapist
+    pool.query('INSERT INTO USERS(USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, IS_ADMIN, IS_THERAPIST) VALUES ($1, $2, $3, $4, $5, false, $6)', [fname, lname, email, phone, password, isTherapist], (err, res) => {
         if(err) {
             response.json({err: err})
             console.log(err)
@@ -67,9 +69,17 @@ app.get('/createAccount', (req, response) => {
     })
 })
 
-app.get('/appointments', (req, response) => {
-    let input = req.query
-    pool.query(`SELECT * FROM APPOINTMENTS JOIN USER_APPOINTMENTS ON APPOINTMENTS.APPOINTMENT_ID = USER_APPOINTMENTS.APPOINTMENT_ID JOIN USERS ON USERS.USER_ID = USER_APPOINTMENTS.USER_ID WHERE USERS.USER_EMAIL = $1 OR $2 = TRUE`, [input.email, input.is_admin], (err, res) => {
+app.get('/get-appointments', (req, response) => {
+    let query = `SELECT 
+                    APPOINTMENT_ID,
+                    EXPERIENCE_ID,
+                    EXPERIENCE_NAME,
+                    USER_ID AS THERAPIST_ID,
+                    USER_FIRST_NAME AS THERAPIST_FIRST_NAME,
+                    USER_LAST_NAME AS THERAPIST_LAST_NAME
+                FROM APPOINTMENT_INFO_VIEW
+                WHERE IS_THERAPIST = TRUE`
+    pool.query(query, (err, res) => {
         if(err) {
             response.json({err: err})
             return
