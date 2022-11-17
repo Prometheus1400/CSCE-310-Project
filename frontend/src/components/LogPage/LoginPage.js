@@ -1,10 +1,41 @@
-import * as React from "react"
+import React, { useState } from "react";
 import "./styles/LoginPage.css"
 import Logo from "./styles/logo.png"
 import { Grid, TextField, Button, Stack } from "@mui/material"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 function LoginPage() {
+
+    const navigate = useNavigate();
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
+    const sampleUsername = "samiyusuf";
+    const samplePassword = "1";
+
+    const handleUsernameChange = ({ target }) => {
+        setUsername(target.value);
+    };
+
+    const handlePasswordChange = ({ target }) => {
+        setPassword(target.value);
+    };
+
+    const handleClick = () => {
+        console.log(username);
+        console.log(password);
+        if(username === sampleUsername && password === samplePassword){
+            console.log("IN HERE");
+            navigate("/home");
+        }
+        else{
+            setErrorMessage("WRONG USERNAME OR PASSWORD!");
+        }
+        
+    };
+
     return (
       <div className="LoginPage">
         <Grid
@@ -14,7 +45,7 @@ function LoginPage() {
             alignItems="center"
         >
             <Grid item xs={6} style={{textAlign: "center"}}>
-                <img src={Logo} className="AppLogo"></img>
+                <img src={Logo} className="AppLogo" alt="Logo"></img>
             </Grid>
             <Grid item xs={6}>
                 <Stack
@@ -23,9 +54,10 @@ function LoginPage() {
                     alignItems="center"
                     spacing={1}
                 >
-                    <TextField id="standard-basic" label="Username" variant="standard" alt="LoginUsername"></TextField>
-                    <TextField id="standard-basic" label="Password" variant="standard" alt="LoginPassword"></TextField>
-                    <Button variant="contained">Log In</Button>
+                    <TextField id="standard-basic" label="Username" variant="standard" alt="LoginUsername" onChange={handleUsernameChange} value={username}></TextField>
+                    <TextField id="standard-basic" label="Password" variant="standard" alt="LoginPassword" onChange={handlePasswordChange} value={password}></TextField>
+                    <Button variant="contained" onClick={handleClick}>Log In</Button>
+                    {errorMessage && <div className="error"> {errorMessage} </div>}
                     <p>Don't have an account? 
                         <Link to="/signin">
                             <Button variant="text">Sign in</Button> 
