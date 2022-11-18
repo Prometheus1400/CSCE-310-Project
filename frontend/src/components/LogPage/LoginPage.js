@@ -23,8 +23,6 @@ function LoginPage() {
     };
 
     const handleClick = () => {
-        console.log(username);
-        console.log(password);
         var queryedUsername = "";
         var queryedPassword = "";
 
@@ -35,15 +33,16 @@ function LoginPage() {
             }
         });
 
-        console.log(res);
-
         if(username === queryedUsername && password === queryedPassword){
-            console.log("IN HERE");
             navigate("/home");
         }
         else{
             setErrorMessage("WRONG USERNAME OR PASSWORD!");
         }
+
+        setUsername("")
+        setPassword("")
+        setErrorMessage("")
         
     };
 

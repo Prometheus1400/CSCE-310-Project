@@ -29,12 +29,6 @@ function SigninPage() {
     };
 
     const handleClick = () => {
-        console.log(firstname);
-        console.log(lastname);
-        console.log(email);
-        console.log(password);
-        const fullName = firstname + lastname;
-        console.log(fullName);
         
         const data = {
             email: email,
