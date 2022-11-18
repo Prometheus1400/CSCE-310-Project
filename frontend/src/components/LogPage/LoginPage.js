@@ -34,14 +34,16 @@ function LoginPage() {
         });
 
         if(username === queryedUsername && password === queryedPassword){
+            setUsername("")
+            setPassword("")
+            setErrorMessage("")
             navigate("/home");
         }
         else{
             setErrorMessage("WRONG USERNAME OR PASSWORD!");
         }
 
-        setUsername("")
-        setPassword("")        
+              
     };
 
     return (
