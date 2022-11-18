@@ -41,9 +41,7 @@ function LoginPage() {
         }
 
         setUsername("")
-        setPassword("")
-        setErrorMessage("")
-        
+        setPassword("")        
     };
 
     return (
