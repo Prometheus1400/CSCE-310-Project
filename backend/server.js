@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 const path = require('path')
 const { Pool } = require('pg');
@@ -14,6 +15,8 @@ app.use(cors({
     origin: 'http://localhost:3000'
   }));
 app.use(express.static(path.join(__dirname + "/public")))
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // start database connection
 const pool = new Pool({
@@ -55,19 +58,19 @@ app.get('/login', (req, response) => {
 })
 
 app.post('/createAccount', (req, response) => {
-    let email = req.query.email
-    let password = req.query.password
-    let phone = req.query.phone
-    let fname = req.query.fname
-    let lname = req.query.lname
-    let isTherapist = req.query.isTherapist
+    let email = req.body.email
+    let password = req.body.password
+    let phone = req.body.phone
+    let fname = req.body.fname
+    let lname = req.body.lname
+    let isTherapist = req.body.isTherapist
     pool.query('INSERT INTO USERS(USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, IS_ADMIN, IS_THERAPIST) VALUES ($1, $2, $3, $4, $5, false, $6)', [fname, lname, email, phone, password, isTherapist], (err, res) => {
         if(err) {
             response.json({err: err})
             console.log(err)
             return
         }
-        response.json({err: false})
+        response.sendStatus(200)
     })
 })
 
