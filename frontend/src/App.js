@@ -1,6 +1,8 @@
+import React from "react";
 import HomePage from "./pages/HomePage";
 import { Route, Routes, Outlet, BrowserRouter } from "react-router-dom"
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./components/LogPage/LoginPage"
+import SigninPage from "./components/LogPage/SigninPage"
 import Navbar from "./components/Navbar";
 import ApppointmentPage from "./pages/AppointmentPage";
 import ReviewPage from "./pages/ReviewPage";
@@ -12,6 +14,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="signin" element={<SigninPage />} />
           <Route element={<div className="routeContainerDiv">
             <Navbar />
             <Outlet />
