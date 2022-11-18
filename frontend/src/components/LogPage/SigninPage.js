@@ -3,12 +3,13 @@ import "./styles/LoginPage.css"
 import Logo from "./styles/logo.png"
 import { Grid, TextField, Button, Stack, Checkbox, FormGroup, FormControlLabel } from "@mui/material"
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 function SigninPage() {
 
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleFirstnameChange = ({ target }) => {
@@ -19,8 +20,8 @@ function SigninPage() {
         setLastname(target.value);
     };
 
-    const handleUsernameChange = ({ target }) => {
-        setUsername(target.value);
+    const handleEmailChange = ({ target }) => {
+        setEmail(target.value);
     };
 
     const handlePasswordChange = ({ target }) => {
@@ -30,8 +31,21 @@ function SigninPage() {
     const handleClick = () => {
         console.log(firstname);
         console.log(lastname);
-        console.log(username);
+        console.log(email);
         console.log(password);
+        const fullName = firstname + lastname;
+        console.log(fullName);
+        
+        const data = {
+            email: email,
+            password: password,
+            phone: "1",
+        };
+
+        axios
+            .post("/createAccount", data)
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
     };
 
     return (
@@ -54,7 +68,7 @@ function SigninPage() {
                 >
                     <TextField id="standard-basic" label="Firstname" variant="standard" alt="SigninFirstName" onChange={handleFirstnameChange} value={firstname}></TextField>
                     <TextField id="standard-basic" label="Lastname" variant="standard" alt="SigninLastName" onChange={handleLastnameChange} value={lastname}></TextField>
-                    <TextField id="standard-basic" label="Username" variant="standard" alt="SigninUsername" onChange={handleUsernameChange} value={username}></TextField>
+                    <TextField id="standard-basic" label="Email" variant="standard" alt="SigninEmail" onChange={handleEmailChange} value={email}></TextField>
                     <TextField id="standard-basic" label="Password" variant="standard" alt="SigninPassword" onChange={handlePasswordChange} value={password}></TextField>
                     <FormGroup>
                         <FormControlLabel control={<Checkbox  />} label="Admin" />

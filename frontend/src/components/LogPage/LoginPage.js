@@ -3,6 +3,7 @@ import "./styles/LoginPage.css"
 import Logo from "./styles/logo.png"
 import { Grid, TextField, Button, Stack } from "@mui/material"
 import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 
 function LoginPage() {
@@ -12,8 +13,6 @@ function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = React.useState("");
-    const sampleUsername = "samiyusuf";
-    const samplePassword = "1";
 
     const handleUsernameChange = ({ target }) => {
         setUsername(target.value);
@@ -26,7 +25,19 @@ function LoginPage() {
     const handleClick = () => {
         console.log(username);
         console.log(password);
-        if(username === sampleUsername && password === samplePassword){
+        var queryedUsername = "";
+        var queryedPassword = "";
+
+        const res = axios.get('/login', {
+            headers: {
+            'email': queryedUsername,
+            'password': queryedPassword
+            }
+        });
+
+        console.log(res);
+
+        if(username === queryedUsername && password === queryedPassword){
             console.log("IN HERE");
             navigate("/home");
         }

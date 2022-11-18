@@ -10,7 +10,9 @@ const DATABASE_URL = process.env.DATABASE_URL
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000'
+  }));
 app.use(express.static(path.join(__dirname + "/public")))
 
 // start database connection
@@ -52,12 +54,14 @@ app.get('/login', (req, response) => {
     })
 })
 
-app.get('/createAccount', (req, response) => {
+app.post('/createAccount', (req, response) => {
     let email = req.query.email
     let password = req.query.password
     let phone = req.query.phone
     let name = req.query.name
-    pool.query('INSERT INTO USERS(USER_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, ID_ADMIN) VALUES ($1, $2, $3, $4, false)', [name, email, phone, password], (err, res) => {
+    console.log("IN HERE")
+    console.log(req.body)
+    pool.query('INSERT INTO USERS(USER_EMAIL, USER_PHONE, USER_PASSWORD, IS_ADMIN) VALUES ($1, $2, $3, false)', [email, phone, password], (err, res) => {
         if(err) {
             response.json({err: err})
             console.log(err)
