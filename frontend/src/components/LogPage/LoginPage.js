@@ -31,10 +31,10 @@ function LoginPage() {
             }
         })
         .then(function(response){
-            console.log(response);
             const isUser = response.data.exists;
             console.log(isUser);
             if(isUser){
+                //const isAdmin = response.data.isAdmin
                 navigate("/home");
             }
             else{
