@@ -44,7 +44,7 @@ app.get('/users', (req, response) => {
 app.get('/login', (req, response) => {
     let email = req.query.email
     let password = req.query.password
-    pool.query('SELECT IS_ADMIN FROM USERS WHERE USER_EMAIL = $1 AND USER_PASSWORD = $2', [email, password], (err, res) => {
+    pool.query('SELECT IS_ADMIN FROM USERS WHERE USER_EMAIL = $1 AND USER_PASSWORD = $2;', [email, password], (err, res) => {
         if(err) {
             response.json({err: err})
             return
