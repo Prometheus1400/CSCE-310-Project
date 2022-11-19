@@ -44,13 +44,13 @@ app.get('/users', (req, response) => {
 app.get('/login', (req, response) => {
     let email = req.query.email
     let password = req.query.password
-    pool.query('SELECT IS_ADMIN FROM USERS WHERE USER_EMAIL = $1 AND USER_PASSWORD = $2', [email, password], (err, res) => {
+    pool.query('SELECT USER_ID, IS_ADMIN FROM USERS WHERE USER_EMAIL = $1 AND USER_PASSWORD = $2', [email, password], (err, res) => {
         if(err) {
             response.json({err: err})
             return
         }
         if(res.rows.length > 0) { // if user exists
-            response.json({exists: true, isAdmin: res.rows[0].is_admin}) // send isAdmin boolean
+            response.json({exists: true, userID: res.rows[0].user_id, isAdmin: res.rows[0].is_admin}) // send isAdmin boolean
             return
         }
         response.json({exists: false}) // user does not exist
