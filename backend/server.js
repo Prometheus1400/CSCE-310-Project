@@ -50,7 +50,7 @@ app.get('/login', (req, response) => {
             return
         }
         if(res.rows.length > 0) { // if user exists
-            response.json({exists: true, isAdmin: res.rows[0].is_admin}) // send isAdmin boolean
+            response.json({exists: true, userID: res.rows[0].user_id, isAdmin: res.rows[0].is_admin}) // send isAdmin boolean
             return
         }
         response.json({exists: false}) // user does not exist
