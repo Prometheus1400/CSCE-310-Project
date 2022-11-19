@@ -23,22 +23,24 @@ function LoginPage() {
     };
 
     const handleClick = () => {
-        var queryedUsername = "";
-        var queryedPassword = "";
 
-        const res = axios.get('/login', {
-            headers: {
-            'email': queryedUsername,
-            'password': queryedPassword
+        axios.get('/login', {
+            params: {
+            'email': username,
+            'password': password
             }
-        });
-
-        if(username === queryedUsername && password === queryedPassword){
-            navigate("/home");
-        }
-        else{
-            setErrorMessage("WRONG USERNAME OR PASSWORD!");
-        }
+        })
+        .then(function(response){
+            console.log(response);
+            const isUser = response.data.exists;
+            console.log(isUser);
+            if(isUser){
+                navigate("/home");
+            }
+            else{
+                setErrorMessage("WRONG USERNAME OR PASSWORD!");
+            }
+        })
 
         setUsername("")
         setPassword("")        

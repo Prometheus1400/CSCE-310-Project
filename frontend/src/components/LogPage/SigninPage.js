@@ -9,6 +9,7 @@ function SigninPage() {
 
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
+    const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -18,6 +19,10 @@ function SigninPage() {
 
     const handleLastnameChange = ({ target }) => {
         setLastname(target.value);
+    };
+
+    const handlePhoneChange = ({ target }) => {
+        setPhone(target.value);
     };
 
     const handleEmailChange = ({ target }) => {
@@ -33,7 +38,10 @@ function SigninPage() {
         const data = {
             email: email,
             password: password,
-            phone: "1",
+            phone: phone,
+            fname: firstname,
+            lname: lastname,
+            isTherapist: "false"
         };
 
         axios
@@ -60,8 +68,9 @@ function SigninPage() {
                     alignItems="center"
                     spacing={1}
                 >
-                    <TextField id="standard-basic" label="Firstname" variant="standard" alt="SigninFirstName" onChange={handleFirstnameChange} value={firstname}></TextField>
-                    <TextField id="standard-basic" label="Lastname" variant="standard" alt="SigninLastName" onChange={handleLastnameChange} value={lastname}></TextField>
+                    <TextField id="standard-basic" label="First Name" variant="standard" alt="SigninFirstName" onChange={handleFirstnameChange} value={firstname}></TextField>
+                    <TextField id="standard-basic" label="Last Name" variant="standard" alt="SigninLastName" onChange={handleLastnameChange} value={lastname}></TextField>
+                    <TextField id="standard-basic" label="Phone Number" variant="standard" alt="SigninPhone" onChange={handlePhoneChange} value={phone}></TextField>
                     <TextField id="standard-basic" label="Email" variant="standard" alt="SigninEmail" onChange={handleEmailChange} value={email}></TextField>
                     <TextField id="standard-basic" label="Password" variant="standard" alt="SigninPassword" onChange={handlePasswordChange} value={password}></TextField>
                     <FormGroup>
