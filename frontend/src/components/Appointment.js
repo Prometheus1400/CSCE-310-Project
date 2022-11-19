@@ -1,16 +1,16 @@
 import { Grid, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Delete from '@mui/icons-material/Delete';
 import { useContext } from 'react';
 import { AptFuncContext } from '../context/AptFuncContext';
+import { UserContext } from '../context/UserContext';
 
 export default function Appointment(props) {
     const { experienceName, experienceID, therapistName, startTime, endTime } = props.item
     const { canBook, canRemove } = props
-    const { handleBook, handleRemove } = useContext(AptFuncContext)
+    const { handleUserBook, handleUserRemove } = useContext(AptFuncContext)
 
     // get from UserContext
-    const userID = 2
+    const {user} = useContext(UserContext)
 
     return (
         <div className="Appointment" style={{
@@ -35,12 +35,12 @@ export default function Appointment(props) {
                 </Grid>
                 {canBook &&
                     <Grid item xs={3}>
-                        <Button onClick={() => { handleBook(experienceID, userID) }} variant="contained" size="small">book</Button>
+                        <Button onClick={() => { handleUserBook(experienceID, user.userID) }} variant="contained" size="small">book</Button>
                     </Grid>
                 }
                 {canRemove &&
                     <Grid item xs={3}>
-                        <Button onClick={() => { handleRemove(experienceID, userID) }} variant="contained" size="small"><DeleteIcon /></Button>
+                        <Button onClick={() => { handleUserRemove(experienceID, user.userID) }} variant="contained" size="small"><DeleteIcon /></Button>
                     </Grid>
                 }
             </Grid>

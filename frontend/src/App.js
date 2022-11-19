@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import HomePage from "./pages/HomePage";
 import { Route, Routes, Outlet, BrowserRouter } from "react-router-dom"
 import LoginPage from "./components/LogPage/LoginPage"
@@ -8,9 +8,13 @@ import ApppointmentPage from "./pages/AppointmentPage";
 import ReviewPage from "./pages/ReviewPage";
 import UserPage from "./pages/UserPage";
 import { UserContext } from "./context/UserContext";
+import usePersistentState from "./hooks/usePersistentState";
 
 function App() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = usePersistentState("user", {
+    userID:"",
+    isAdmin:false,
+  })
   const userValue = useMemo(() => ({ user, setUser }), [user, setUser])
 
   return (

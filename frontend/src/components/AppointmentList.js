@@ -1,13 +1,12 @@
-import { useEffect } from "react"
 import Appointment from "./Appointment"
 
 function AppointmentList(props) {
     // TODO: implement context to get isAdmin state
-    const isAdmin = false
+    const {apts} = props
     let count = 0
 
     // get from props
-    const apts = [
+/*     const apts = [
         {
             "experienceID": "1",
             "experienceName": "group session",
@@ -49,7 +48,8 @@ function AppointmentList(props) {
             "therapistName": "Stan Smith",
         },
     ]
-
+ */
+    
     const aptComponents = apts.map((a) => {
         count++
         return (
@@ -61,8 +61,6 @@ function AppointmentList(props) {
             />
         )
     })
-
-    console.log(aptComponents)
 
     return (
         <div className="AppointmentList" style={{

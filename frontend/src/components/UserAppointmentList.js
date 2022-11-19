@@ -1,7 +1,8 @@
 import Appointment from "./Appointment"
 
 export default function UserAppointmentList(props) {
-    const userApts = [
+    const {userApts} = props
+    /* const userApts = [
         {
             "experienceID": "1",
             "experienceName": "group session",
@@ -34,12 +35,15 @@ export default function UserAppointmentList(props) {
             "therapistID": "1",
             "therapistName": "Stan Smith",
         },
-    ]
+    ] */
 
+    let count = 0
     const userAptsComps = userApts.map((a) => {
+        count++
         return (
             <Appointment 
                 item={a}
+                key={count}
                 canBook={false}
                 canRemove={true}
             />
