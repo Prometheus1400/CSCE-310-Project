@@ -15,7 +15,7 @@ function LoginPage() {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = React.useState("");
 
-    const {setUser} = useContext(UserContext)
+    const { setUser } = useContext(UserContext)
 
     const handleUsernameChange = ({ target }) => {
         setUsername(target.value);
@@ -71,8 +71,8 @@ function LoginPage() {
                         alignItems="center"
                         spacing={1}
                     >
-                        <TextField id="standard-basic" label="Username" variant="standard" alt="LoginUsername" onChange={handleUsernameChange} value={username}></TextField>
-                        <TextField id="standard-basic" label="Password" variant="standard" alt="LoginPassword" onChange={handlePasswordChange} value={password}></TextField>
+                        <TextField id="standard-basi" label="Username" variant="standard" alt="LoginUsername" onChange={handleUsernameChange} value={username}></TextField>
+                        <TextField id="standard-basic" label="Password" variant="standard" alt="LoginPassword" type="password" onChange={handlePasswordChange} value={password}></TextField>
                         <Button variant="contained" onClick={handleClick}>Log In</Button>
                         {errorMessage && <div className="error"> {errorMessage} </div>}
                         <p>Don't have an account?

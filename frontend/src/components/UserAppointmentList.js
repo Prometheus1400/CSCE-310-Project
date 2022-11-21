@@ -59,6 +59,7 @@ export default function UserAppointmentList(props) {
             marginRight: "auto",
             padding: "10px",
             textAlign: "center",
+            height:"450px",
         }}>
             <h3>My Appointments</h3>
             {userAptsComps}

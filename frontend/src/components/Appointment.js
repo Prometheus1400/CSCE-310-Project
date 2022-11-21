@@ -5,10 +5,9 @@ import { AptFuncContext } from '../context/AptFuncContext';
 import { UserContext } from '../context/UserContext';
 
 export default function Appointment(props) {
-    const { experienceName, experienceID, therapistName, startTime, endTime } = props.item
+    const { experienceName, appointmentID, therapistName, startTime, endTime } = props.item
     const { canBook, canRemove } = props
-    const { handleUserBook, handleUserRemove } = useContext(AptFuncContext)
-
+    const { handleUserBook, handleUserRemove, handleAdminDelete } = useContext(AptFuncContext)
     // get from UserContext
     const {user} = useContext(UserContext)
 
@@ -33,14 +32,19 @@ export default function Appointment(props) {
                 <Grid item xs={3}>
                     {startTime} : {endTime}
                 </Grid>
-                {canBook &&
+                {!user.isAdmin && canBook &&
                     <Grid item xs={3}>
-                        <Button onClick={() => { handleUserBook(experienceID, user.userID) }} variant="contained" size="small">book</Button>
+                        <Button onClick={() => { handleUserBook(appointmentID, user.userID) }} variant="contained" size="small">book</Button>
                     </Grid>
                 }
-                {canRemove &&
+                {!user.isAdmin && canRemove &&
                     <Grid item xs={3}>
-                        <Button onClick={() => { handleUserRemove(experienceID, user.userID) }} variant="contained" size="small"><DeleteIcon /></Button>
+                        <Button onClick={() => { handleUserRemove(appointmentID, user.userID) }} variant="contained" size="small"><DeleteIcon /></Button>
+                    </Grid>
+                }
+                {user.isAdmin &&
+                    <Grid item xs={3}>
+                        <Button onClick={() => { handleAdminDelete(appointmentID) }} variant="contained" size="small"><DeleteIcon /></Button>
                     </Grid>
                 }
             </Grid>

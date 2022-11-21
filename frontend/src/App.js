@@ -4,7 +4,7 @@ import { Route, Routes, Outlet, BrowserRouter } from "react-router-dom"
 import LoginPage from "./components/LogPage/LoginPage"
 import SigninPage from "./components/LogPage/SigninPage"
 import Navbar from "./components/Navbar";
-import ApppointmentPage from "./pages/AppointmentPage";
+import AppointmentPage from "./pages/AppointmentPage";
 import ReviewPage from "./pages/ReviewPage";
 import UserPage from "./pages/UserPage";
 import { UserContext } from "./context/UserContext";
@@ -29,7 +29,7 @@ function App() {
               <Outlet />
             </div>}>
               <Route path="/home" element={<HomePage />} />
-              <Route path="/appointments" element={<ApppointmentPage />} />
+              <Route path="/appointments" element={<AppointmentPage />} />
               <Route path="/reviews" element={<ReviewPage />} />
               <Route path="/users" element={<UserPage />} />
             </Route>
