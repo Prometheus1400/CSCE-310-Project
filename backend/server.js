@@ -81,14 +81,30 @@ app.get('/get-appointments', (req, response) => {
                     EXPERIENCE_NAME,
                     USER_ID AS THERAPIST_ID,
                     USER_FIRST_NAME AS THERAPIST_FIRST_NAME,
-                    USER_LAST_NAME AS THERAPIST_LAST_NAME
+                    USER_LAST_NAME AS THERAPIST_LAST_NAME,
+                    APPOINTMENT_START_TIME,
+                    APPOINTMENT_END_TIME
                 FROM APPOINTMENT_INFO_VIEW
-                WHERE IS_THERAPIST = TRUE`
+                WHERE IS_THERAPIST = TRUE
+                ORDER BY APPOINTMENT_START_TIME`
     pool.query(query, (err, res) => {
         if(err) {
             response.json({err: err})
             return
         }
         response.json({rows: res.rows})
+    })
+})
+
+app.get('/get-user-appointments', (req, response) => {
+    let user = req.body.userID
+    let query = `SELECT APPOINTMENT_ID FROM USER_APPOINTMENTS WHERE USER_ID = $1`
+    pool.query(query, [user], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            console.log(err)
+            return
+        }
+        response.json({appointments: res.rows})
     })
 })
