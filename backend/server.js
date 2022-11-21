@@ -108,3 +108,31 @@ app.get('/get-user-appointments', (req, response) => {
         response.json({appointments: res.rows})
     })
 })
+
+app.post('/user-book', (req, response) => {
+    let aptID = req.body.aptID
+    let userID = req.body.userID
+    let query = `INSERT INTO USER_APPOINTMENTS(USER_ID, APPOINTMENT_ID) VALUES($1, $2)`
+    pool.query(query, [userID, aptID], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
+
+app.post('/user-unbook', (req, response) => {
+    let aptID = req.body.aptID
+    let userID = req.body.userID
+    let query = `DELETE FROM USER_APPOINTMENTS WHERE USER_ID = $1 AND APPOINTMENT_ID = $2`
+    pool.query(query, [userID, aptID], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
