@@ -92,3 +92,51 @@ app.get('/get-appointments', (req, response) => {
         response.json({rows: res.rows})
     })
 })
+
+/*
+
+POST request /get-reviews
+param: expID
+gets all the reviews associated to the experience
+
+*/
+
+app.get('/get-experiences', (req, response) => {
+    let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID FROM EXPERIENCES`
+    pool.query(query, (err, res) => {
+        if(err) {
+            response.json({err: err})
+            return
+        }
+        response.json({experiences: res.rows})
+    })
+})
+
+app.post('/write-review', (req, response) => {
+    let rating = req.body.rating
+    let review = req.body.review
+    let experience = req.body.expID
+    let user = req.body.userID
+    let query = `INSERT INTO REVIEWS(USER_ID, EXPERIENCE_ID, REVIEW_DATE, REVIEW, RATING)
+        VALUES($1, $2, NOW()::DATE, $3, $4);`
+    pool.query(query, [user, experience, review, rating], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
+
+app.get('/get-reviews', (req, response) => {
+    let expID = req.body.expID
+    let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1;`
+    pool.query(query, [expID], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            return
+        }
+        response.json({reviews: res.rows})
+    })
+})
