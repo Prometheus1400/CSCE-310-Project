@@ -92,3 +92,19 @@ app.get('/get-appointments', (req, response) => {
         response.json({rows: res.rows})
     })
 })
+
+app.get('/get-therapists', (req, response) => {
+    let query = `SELECT
+                    USER_ID AS THERAPIST_ID,
+                    USER_FIRST_NAME AS THERAPIST_FIRST_NAME,
+                    USER_LAST_NAME AS THERAPIST_LAST_NAME
+                FROM USERS
+                WHERE IS_THERAPIST = TRUE`
+    pool.query(query, (err, res) => {
+        if(err) {
+            response.json({err: err})
+            return
+        }
+        response.json({therapists: res.rows})
+    })
+})
