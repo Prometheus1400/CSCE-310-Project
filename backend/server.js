@@ -93,14 +93,6 @@ app.get('/get-appointments', (req, response) => {
     })
 })
 
-/*
-
-POST request /get-reviews
-param: expID
-gets all the reviews associated to the experience
-
-*/
-
 app.get('/get-experiences', (req, response) => {
     let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID FROM EXPERIENCES`
     pool.query(query, (err, res) => {
