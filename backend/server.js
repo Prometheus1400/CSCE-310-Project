@@ -96,6 +96,27 @@ app.get('/get-appointments', (req, response) => {
     })
 })
 
+
+app.get('/get-experiences', (req, response) => {
+    let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID FROM EXPERIENCES`
+    pool.query(query, (err, res) => {
+        if(err) {
+            response.json({err: err})
+            return
+        }
+        response.json({experiences: res.rows})
+    })
+})
+
+app.post('/write-review', (req, response) => {
+    let rating = req.body.rating
+    let review = req.body.review
+    let experience = req.body.expID
+    let user = req.body.userID
+    let query = `INSERT INTO REVIEWS(USER_ID, EXPERIENCE_ID, REVIEW_DATE, REVIEW, RATING)
+        VALUES($1, $2, NOW()::DATE, $3, $4);`
+    pool.query(query, [user, experience, review, rating], (err, res) => {
+    
 app.get('/get-user-appointments', (req, response) => {
     let user = req.body.userID
     let query = `WITH THERAPISTS AS (
@@ -145,6 +166,17 @@ app.post('/user-book', (req, response) => {
         response.sendStatus(200)
     })
 })
+
+
+app.get('/get-reviews', (req, response) => {
+    let expID = req.body.expID
+    let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1;`
+    pool.query(query, [expID], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            return
+        }
+        response.json({reviews: res.rows})
 
 app.post('/user-unbook', (req, response) => {
     let aptID = req.body.aptID
