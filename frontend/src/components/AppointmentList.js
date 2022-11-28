@@ -2,7 +2,7 @@ import Appointment from "./Appointment"
 import { useContext, useState } from "react"
 import { UserContext } from "../context/UserContext"
 import { AptFuncContext } from "../context/AptFuncContext";
-import { Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, Select, MenuItem } from "@mui/material"
+import { Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, Select, MenuItem, FormControl } from "@mui/material"
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -68,10 +68,9 @@ function AppointmentList(props) {
 
     const handleSubmit = () => {
         // send post request
-        console.log("formData:", formData)
         handleAdminAdd(formData)
         setFormData({
-            experienceID: "",
+            experienceID: '',
             therapistID: "",
             startTime: "",
             duration: "",
@@ -193,58 +192,74 @@ function AppointmentList(props) {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add appointment details here.</DialogTitle>
                 <DialogContent>
-                    <InputLabel id="experience">Experience</InputLabel>
-                    <Select
-                        id="experience"
-                        name="experienceID"
-                        value={formData.experienceId}
-                        label="Experience"
-                        onChange={handleFormChange}
-                        defaultValue={""}
-                        sx={{ minWidth: 246 }}
-                    >
-                        {experienceOptions}
-                    </Select>
-                    <InputLabel id="therapist">Therapist</InputLabel>
-                    <Select
-                        id="therapist"
-                        name="therapistID"
-                        value={formData.therapistId}
-                        label="Experience"
-                        onChange={handleFormChange}
-                        defaultValue={""}
-                        sx={{ minWidth: 246 }}
-                    >
-                        {therapistOptions}
-                    </Select>
-                    <br />
-                    <br />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
-                            label="Choose a start time"
-                            value={formData.startTime || null}
-                            onChange={(newTime) => setFormData((prev) => {
-                                return ({
-                                    ...prev,
-                                    startTime: newTime
-                                })
-                            })}
-                            renderInput={(params) => <TextField {...params} />}
-                            id="startTime"
-                        />
-                    </LocalizationProvider>
-                    <InputLabel id="duration">duration</InputLabel>
-                    <Select
-                        id="duration"
-                        name="duration"
-                        value={formData.duration}
-                        label="Duration"
-                        onChange={handleFormChange}
-                        defaultValue={""}
-                        sx={{ minWidth: 246 }}
-                    >
-                        {durationOptions}
-                    </Select>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="experience">Experience</InputLabel>
+                        <Select
+                            id="experience"
+                            name="experienceID"
+                            value={formData.experienceID}
+                            label="Experience"
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 246 }}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {experienceOptions}
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="therapist">Therapist</InputLabel>
+                        <Select
+                            id="therapist"
+                            name="therapistID"
+                            value={formData.therapistID}
+                            label="Experience"
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 246 }}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {therapistOptions}
+                        </Select>
+                    </FormControl>
+                    {/* <br />
+                    <br /> */}
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateTimePicker
+                                label="Choose a start time"
+                                value={formData.startTime || null}
+                                onChange={(newTime) => setFormData((prev) => {
+                                    return ({
+                                        ...prev,
+                                        startTime: newTime
+                                    })
+                                })}
+                                renderInput={(params) => <TextField {...params} />}
+                                id="startTime"
+                            />
+                        </LocalizationProvider>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 120 }} >
+                        <InputLabel id="duration">Duration</InputLabel>
+                        <Select
+                            id="duration"
+                            name="duration"
+                            value={formData.duration}
+                            label="Duration"
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 246 }}
+                            defaultValue=""
+                        >
+                            {/* <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem> */}
+                            {durationOptions}
+                        </Select>
+                    </FormControl>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -256,6 +271,7 @@ function AppointmentList(props) {
                         variant="standard"
                         value={formData.comments}
                         onChange={handleFormChange}
+                        autoComplete="off"
                     />
                 </DialogContent>
                 <DialogActions>

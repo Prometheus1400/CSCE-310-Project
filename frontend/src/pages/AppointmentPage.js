@@ -26,7 +26,7 @@ function AppointmentPage() {
     }
 
     const getUserAppointments = useCallback(() => {
-        user.isAdmin && axios.get("/get-user-appointments", {
+        !user.isAdmin && axios.get("/get-user-appointments", {
             params: {
                 userID: user.userID,
             }
@@ -41,7 +41,9 @@ function AppointmentPage() {
 
     // query to get appointment list and users appointments
     useEffect(() => {
-        console.log("appointmentPage useEffect()")
+        if (!user || user.userID === '') return
+
+        console.log("appointmentPage useEffect()", user)
         getAppointments()
         getUserAppointments()
         // user.isAdmin = true
@@ -64,6 +66,7 @@ function AppointmentPage() {
     }
 
     const handleAdminAdd = (aptInfo) => {
+        console.log(typeof(aptInfo.startTime))
         console.log("handleAdminDelete()", aptInfo)
     }
 

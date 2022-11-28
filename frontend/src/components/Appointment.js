@@ -5,10 +5,9 @@ import { AptFuncContext } from '../context/AptFuncContext';
 import { UserContext } from '../context/UserContext';
 
 export default function Appointment(props) {
-    const { experienceName, appointmentID, therapistName, startTime, endTime } = props.item
+    const { experience_name, appointment_id, therapist_first_name, therapist_last_name, startTime, endTime } = props.item
     const { canBook, canRemove } = props
     const { handleUserBook, handleUserRemove, handleAdminDelete } = useContext(AptFuncContext)
-    // get from UserContext
     const {user} = useContext(UserContext)
 
     return (
@@ -24,27 +23,27 @@ export default function Appointment(props) {
         }}>
             <Grid container spacing={0} direction="row" justifyContent="center" alignItems="center">
                 <Grid item xs={3}>
-                    {experienceName}
+                    {experience_name}
                 </Grid>
                 <Grid item xs={3}>
-                    {therapistName}
+                    {therapist_first_name + " " + therapist_last_name}
                 </Grid>
                 <Grid item xs={3}>
                     {startTime} : {endTime}
                 </Grid>
                 {!user.isAdmin && canBook &&
                     <Grid item xs={3}>
-                        <Button onClick={() => { handleUserBook(appointmentID, user.userID) }} variant="contained" size="small">book</Button>
+                        <Button onClick={() => { handleUserBook(appointment_id, user.userID) }} variant="contained" size="small">book</Button>
                     </Grid>
                 }
                 {!user.isAdmin && canRemove &&
                     <Grid item xs={3}>
-                        <Button onClick={() => { handleUserRemove(appointmentID, user.userID) }} variant="contained" size="small"><DeleteIcon /></Button>
+                        <Button onClick={() => { handleUserRemove(appointment_id, user.userID) }} variant="contained" size="small"><DeleteIcon /></Button>
                     </Grid>
                 }
                 {user.isAdmin &&
                     <Grid item xs={3}>
-                        <Button onClick={() => { handleAdminDelete(appointmentID) }} variant="contained" size="small"><DeleteIcon /></Button>
+                        <Button onClick={() => { handleAdminDelete(appointment_id) }} variant="contained" size="small"><DeleteIcon /></Button>
                     </Grid>
                 }
             </Grid>
