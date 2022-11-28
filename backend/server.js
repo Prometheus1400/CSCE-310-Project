@@ -81,14 +81,81 @@ app.get('/get-appointments', (req, response) => {
                     EXPERIENCE_NAME,
                     USER_ID AS THERAPIST_ID,
                     USER_FIRST_NAME AS THERAPIST_FIRST_NAME,
-                    USER_LAST_NAME AS THERAPIST_LAST_NAME
+                    USER_LAST_NAME AS THERAPIST_LAST_NAME,
+                    APPOINTMENT_START_TIME,
+                    APPOINTMENT_END_TIME
                 FROM APPOINTMENT_INFO_VIEW
-                WHERE IS_THERAPIST = TRUE`
+                WHERE IS_THERAPIST = TRUE
+                ORDER BY APPOINTMENT_START_TIME`
     pool.query(query, (err, res) => {
         if(err) {
             response.json({err: err})
             return
         }
         response.json({rows: res.rows})
+    })
+})
+
+app.get('/get-user-appointments', (req, response) => {
+    let user = req.body.userID
+    let query = `WITH THERAPISTS AS (
+                    SELECT 
+                        USERS.USER_ID AS THERAPIST_ID, 
+                        USERS.USER_FIRST_NAME AS THERAPIST_FIRST_NAME,
+                        USERS.USER_LAST_NAME AS THERAPIST_LAST_NAME,
+                        APPOINTMENT_ID
+                    FROM user_appointments
+                    JOIN USERS
+                    ON USERS.USER_ID = USER_APPOINTMENTS.USER_ID
+                    WHERE IS_THERAPIST = TRUE
+                )
+                SELECT
+                    APPOINTMENT_INFO_VIEW.APPOINTMENT_ID,
+                    EXPERIENCE_ID,
+                    EXPERIENCE_NAME,
+                    THERAPISTS.THERAPIST_ID,
+                    THERAPISTS.THERAPIST_FIRST_NAME,
+                    THERAPISTS.THERAPIST_LAST_NAME,
+                    APPOINTMENT_START_TIME,
+                    APPOINTMENT_END_TIME
+                FROM APPOINTMENT_INFO_VIEW
+                JOIN THERAPISTS
+                ON APPOINTMENT_INFO_VIEW.APPOINTMENT_ID = THERAPISTS.APPOINTMENT_ID
+                WHERE USER_ID = $1`
+    pool.query(query, [user], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            console.log(err)
+            return
+        }
+        response.json({appointments: res.rows})
+    })
+})
+
+app.post('/user-book', (req, response) => {
+    let aptID = req.body.aptID
+    let userID = req.body.userID
+    let query = `INSERT INTO USER_APPOINTMENTS(USER_ID, APPOINTMENT_ID) VALUES($1, $2)`
+    pool.query(query, [userID, aptID], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
+
+app.post('/user-unbook', (req, response) => {
+    let aptID = req.body.aptID
+    let userID = req.body.userID
+    let query = `DELETE FROM USER_APPOINTMENTS WHERE USER_ID = $1 AND APPOINTMENT_ID = $2`
+    pool.query(query, [userID, aptID], (err, res) => {
+        if(err) {
+            response.json({err: err})
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
     })
 })
