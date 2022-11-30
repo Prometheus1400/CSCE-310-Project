@@ -6,9 +6,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext"
+import { styled } from "@mui/material/styles";
+
+const StyledTextField = styled(TextField)({
+    '& .MuiInput-underline:before': {
+        borderBottomColor: 'rgb(171, 174, 178)',
+    },
+    '&:hover .MuiInput-underline:before': {
+        borderBottomColor: 'rgb(171, 174, 178)',
+    },
+    '& label': {
+        color: 'rgb(171, 174, 178)',
+    },
+    '& input': {
+        color: 'rgb(171, 174, 178)',
+    },
+});
 
 function LoginPage() {
-
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
@@ -54,7 +69,13 @@ function LoginPage() {
     };
 
     return (
-        <div className="LoginPage">
+        <div className="LoginPage" style={{
+            color: "rgb(171, 174, 178)",
+            backgroundColor: "rgb(26, 32, 39)",
+            margin: "10px",
+            borderRadius: "10px 10px 10px 10px",
+            padding: "10px",
+        }}>
             <Grid
                 container
                 direction="row"
@@ -71,12 +92,12 @@ function LoginPage() {
                         alignItems="center"
                         spacing={1}
                     >
-                        <TextField id="standard-basi" label="Username" variant="standard" alt="LoginUsername" onChange={handleUsernameChange} value={username}></TextField>
-                        <TextField id="standard-basic" label="Password" variant="standard" alt="LoginPassword" type="password" onChange={handlePasswordChange} value={password}></TextField>
+                        <StyledTextField variant="standard" label="Username" alt="LoginUsername" onChange={handleUsernameChange} value={username}></StyledTextField>
+                        <StyledTextField variant="standard" label="Password" alt="LoginPassword" type="password" onChange={handlePasswordChange} value={password}></StyledTextField>
                         <Button variant="contained" onClick={handleClick}>Log In</Button>
                         {errorMessage && <div className="error"> {errorMessage} </div>}
                         <p>Don't have an account?
-                            <Link to="/signin">
+                            <Link style={{ textDecoration: 'none' }} to="/signin">
                                 <Button variant="text">Sign in</Button>
                             </Link>
                         </p>

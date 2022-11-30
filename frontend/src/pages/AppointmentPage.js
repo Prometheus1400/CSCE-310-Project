@@ -59,14 +59,26 @@ function AppointmentPage() {
             aptID: aptID,
             userID: userID,
         })
-        .then(resp => console.log(resp))
-        .catch(err => console.log(err))
-        // re-quiery user's appointments
-        getUserAppointments()
+            .then(resp => {
+                console.log("handleUserBook:",resp)
+                // re-quiery user's appointments
+                getUserAppointments()
+            })
+            .catch(err => console.log(err))
     }
 
-    const handleUserRemove = (aptID, userID) => {
-        console.log("removed", aptID, userID)
+    const handleUserUnbook = (aptID, userID) => {
+        console.log("handleUserUnbook()", aptID, userID)
+        axios.post("/user-unbook", {
+            aptID: aptID,
+            userID: userID,
+        })
+            .then(resp => {
+                console.log("handleUserUnbook:",resp)
+                // re-quiery user's appointments
+                getUserAppointments()
+            })
+            .catch(err => console.log(err))
     }
 
     const handleAdminDelete = (aptID) => {
@@ -80,7 +92,7 @@ function AppointmentPage() {
 
     const handles = {
         handleUserBook,
-        handleUserRemove,
+        handleUserUnbook,
         handleAdminDelete,
         handleAdminAdd,
     }
@@ -89,7 +101,7 @@ function AppointmentPage() {
         <div className="AppointmentPage" style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
         }}>
             <AptFuncContext.Provider value={handles}>
                 <AppointmentList apts={apts} />

@@ -52,17 +52,24 @@ export default function UserAppointmentList(props) {
 
     return (
         <div className="UserAppointmentList" style={{
-            backgroundColor: "gray",
-            width: "500px",
+            backgroundColor: "rgb(26, 32, 39)",
+            width: "auto",
             margin: "10px",
             marginLeft: "auto",
             marginRight: "auto",
             padding: "10px",
-            textAlign: "center",
             height:"450px",
+            color:"rgb(171, 174, 178)",
+            textAlign: "center",
+            borderRadius:"10px 10px 10px 10px",
+            position:"sticky",
+            left:"400px",
         }}>
             <h3>My Appointments</h3>
             {userAptsComps}
+            {userAptsComps.length === 0 && 
+                <div style={{width:"350px"}}>No appointments booked</div>
+            }
 
         </div>
     )

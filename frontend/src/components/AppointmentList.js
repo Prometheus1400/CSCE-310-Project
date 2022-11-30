@@ -47,9 +47,6 @@ function AppointmentList(props) {
     ]
 
     const handleFormChange = (event) => {
-        // console.log("formData:", formData)
-        // console.log(event.target.name)
-        // console.log(event.target.value)
         setFormData((prev) => {
             return ({
                 ...prev,
@@ -78,50 +75,6 @@ function AppointmentList(props) {
         })
         handleClose()
     }
-
-    // get from props
-    /* const apts = [
-        {
-            "experienceID": "1",
-            "experienceName": "group session",
-            "startTime": "",
-            "duration": "",
-            "therapistID": "1",
-            "therapistName": "Roger Smith",
-        },
-        {
-            "experienceID": "1",
-            "experienceName": "group session",
-            "startTime": "",
-            "duration": "",
-            "therapistID": "1",
-            "therapistName": "Stan Smith",
-        },
-        {
-            "experienceID": "1",
-            "experienceName": "group session",
-            "startTime": "",
-            "duration": "",
-            "therapistID": "1",
-            "therapistName": "Stan Smith",
-        },
-        {
-            "experienceID": "1",
-            "experienceName": "group session",
-            "startTime": "",
-            "duration": "",
-            "therapistID": "1",
-            "therapistName": "Stan Smith",
-        },
-        {
-            "experienceID": "1",
-            "experienceName": "group session",
-            "startTime": "",
-            "duration": "",
-            "therapistID": "1",
-            "therapistName": "Stan Smith",
-        },
-    ] */
 
     let count = 0
     const aptComponents = apts.map((a) => {
@@ -177,10 +130,15 @@ function AppointmentList(props) {
     return (
         <div className="AppointmentList" style={{
             height: "450px",
-            backgroundColor: "gray",
+            backgroundColor: "rgb(26, 32, 39)",
             padding: "10px",
-            width: "300px",
-            margin: "10px"
+            width: "auto",
+            margin: "10px",
+            color: "rgb(171, 174, 178)",
+            textAlign: "center",
+            borderRadius: "10px 10px 10px 10px",
+            position: user.isAdmin ? "static" : "absolute",
+            left: "0px",
 
         }}>
             <h3>Available Appointments &zwnj; &zwnj;
@@ -224,8 +182,6 @@ function AppointmentList(props) {
                             {therapistOptions}
                         </Select>
                     </FormControl>
-                    {/* <br />
-                    <br /> */}
                     <FormControl sx={{ m: 1, minWidth: 120 }}>
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -283,7 +239,7 @@ function AppointmentList(props) {
             <div className="scrollable" style={{ height: "100%", overflowY: "auto" }}>
                 {aptComponents}
             </div>
-        </div>
+        </div >
     )
 
 }
