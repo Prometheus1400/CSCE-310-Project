@@ -291,24 +291,32 @@ app.post('/user-unbook', (req, response) => {
 
 /*
 Profile (User/Admin)
+User: Kaleb
+Admin: Mitchell
     Register a user account
     Login into the user account
 Update user account profile
 Delete Profile
 
 Schedule (User/Admin)
+User: Sami
+Admin: Kaleb
     Create an appointment
     View an appointment
 Update an appointment
 Delete an appointment
 
 Item/Experience (User/Admin)
+User: Mitchell
+Admin: Alisa
 Add an item/experience
     View items /experiences
 Update an item/experience
 Delete an item /experience
 
 Comment/Status/Review/etc. (User/Admin)
+User: Alisa
+Admin: Sami
 Add a Comment/Status/Review/Etc
     View Comment/Status/Review/Etc
 Update a Comment/Status/Review/Etc
