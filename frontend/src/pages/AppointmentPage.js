@@ -31,9 +31,9 @@ function AppointmentPage() {
                 userID: user.userID,
             }
         }).then((resp) => {
-            console.log("got user appointments")
-            console.log(resp.data.rows)
-            setUserApts(resp.data.rows)
+            console.log("got user appointments", user.userID)
+            console.log(resp.data)
+            setUserApts(resp.data.appointments)
         }).catch((err) => {
             console.log(err)
         })
@@ -54,7 +54,15 @@ function AppointmentPage() {
      * re-quiery the userApts
      */
     const handleUserBook = (aptID, userID) => {
-        console.log("Booked", aptID, userID)
+        console.log("handleUserBook()", aptID, userID)
+        axios.post("/user-book", {
+            aptID: aptID,
+            userID: userID,
+        })
+        .then(resp => console.log(resp))
+        .catch(err => console.log(err))
+        // re-quiery user's appointments
+        getUserAppointments()
     }
 
     const handleUserRemove = (aptID, userID) => {
@@ -66,7 +74,7 @@ function AppointmentPage() {
     }
 
     const handleAdminAdd = (aptInfo) => {
-        console.log(typeof(aptInfo.startTime))
+        console.log(typeof (aptInfo.startTime))
         console.log("handleAdminDelete()", aptInfo)
     }
 
@@ -79,13 +87,13 @@ function AppointmentPage() {
 
     return (
         <div className="AppointmentPage" style={{
-            display: "flex", 
+            display: "flex",
             alignItems: "center",
             justifyContent: "center"
         }}>
             <AptFuncContext.Provider value={handles}>
                 <AppointmentList apts={apts} />
-                {!user.isAdmin && 
+                {!user.isAdmin &&
                     <UserAppointmentList userApts={userApts} />
                 }
             </AptFuncContext.Provider>
