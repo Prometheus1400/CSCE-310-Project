@@ -178,6 +178,7 @@ app.post('/user-book', (req, response) => {
 
 app.get('/get-reviews', (req, response) => {
     let expID = req.body.expID
+    console.log(expID)
     let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1;`
     pool.query(query, [expID], (err, res) => {
         if (err) {
