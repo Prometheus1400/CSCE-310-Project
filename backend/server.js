@@ -31,6 +31,14 @@ pool.connect()
 // start listening
 app.listen(PORT, () => console.log('Server on PORT: ' + PORT))
 
+/*
+gets all users from the users table
+
+params:
+    none
+returns:
+    array of dictionaries containing user information
+*/
 app.get('/users', (req, response) => {
     pool.query('SELECT * FROM USERS', (err, res) => {
         if (err) {
@@ -41,6 +49,15 @@ app.get('/users', (req, response) => {
     })
 })
 
+/*
+logs a user into the website
+
+params:
+    email: String
+    password: String
+returns:
+    dictionary containing an error if it occured, if the user exists, the user ID if signin was successful, and if the user is an admin
+*/
 app.get('/login', (req, response) => {
     let email = req.query.email
     let password = req.query.password
@@ -57,6 +74,19 @@ app.get('/login', (req, response) => {
     })
 })
 
+/*
+creates a user account
+
+params:
+    email: String
+    password: String
+    phone: String
+    fname: String
+    lname: String
+    isTherapist: bool
+returns:
+    status of 200 if successful, else returns error
+*/
 app.post('/createAccount', (req, response) => {
     let email = req.body.email
     let password = req.body.password
@@ -74,6 +104,14 @@ app.post('/createAccount', (req, response) => {
     })
 })
 
+/*
+gets all appointments with their assigned therapist
+
+params:
+    none
+returns:
+    array of dictionaries containing all appointments including id, experience, therapist, and times
+*/
 app.get('/get-appointments', (req, response) => {
     let query = `SELECT 
                     APPOINTMENT_ID,
@@ -96,7 +134,14 @@ app.get('/get-appointments', (req, response) => {
     })
 })
 
+/*
+gets all experiences from the experiences table
 
+params:
+    none
+returns:
+    array of dictionaries containing all experience names and IDs
+*/
 app.get('/get-experiences', (req, response) => {
     let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID FROM EXPERIENCES`
     pool.query(query, (err, res) => {
@@ -108,6 +153,14 @@ app.get('/get-experiences', (req, response) => {
     })
 })
 
+/*
+submits a review to the reviews table
+
+params:
+    none
+returns:
+    array of dictionaries containing user information
+*/
 app.post('/write-review', (req, response) => {
     let rating = req.body.rating
     let review = req.body.review
@@ -201,3 +254,30 @@ app.post('/user-unbook', (req, response) => {
         response.sendStatus(200)
     })
 })
+
+/*
+Profile (User/Admin)
+    Register a user account
+    Login into the user account
+Update user account profile
+Delete Profile
+
+Schedule (User/Admin)
+    Create an appointment
+    View an appointment
+Update an appointment
+Delete an appointment
+
+Item/Experience (User/Admin)
+Add an item/experience
+View items /experiences
+Update an item/experience
+Delete an item /experience
+
+Comment/Status/Review/etc. (User/Admin)
+Add a Comment/Status/Review/Etc
+View Comment/Status/Review/Etc
+Update a Comment/Status/Review/Etc
+Delete a Comment/Status/Review/Etc
+
+*/
