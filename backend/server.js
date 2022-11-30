@@ -31,6 +31,7 @@ pool.connect()
 // start listening
 app.listen(PORT, () => console.log('Server on PORT: ' + PORT))
 
+
 /*
 gets all users from the users table
 
@@ -178,6 +179,14 @@ app.post('/write-review', (req, response) => {
     })
 })
 
+/*
+gets all appointments for a specific user
+
+params:
+    userID: int
+returns:
+    array of dictionaries containing users appointments, including therapist, time, experience
+*/
 app.get('/get-user-appointments', (req, response) => {
     let user = req.query.userID
     let query = `WITH THERAPISTS AS (
@@ -214,6 +223,15 @@ app.get('/get-user-appointments', (req, response) => {
     })
 })
 
+/*
+adds a user to an appointment
+
+params:
+    aptID: int
+    userID: int
+returns:
+    array of dictionaries containing user information
+*/
 app.post('/user-book', (req, response) => {
     let aptID = req.body.aptID
     let userID = req.body.userID
@@ -228,7 +246,14 @@ app.post('/user-book', (req, response) => {
     })
 })
 
+/*
+gets all reviews for an experience
 
+params:
+    expID: int
+returns:
+    array of dictionaries containing ratings for specific experience
+*/
 app.get('/get-reviews', (req, response) => {
     let expID = req.query.expID
     let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1;`
@@ -241,6 +266,15 @@ app.get('/get-reviews', (req, response) => {
     })
 })
 
+/*
+removes user from an appointment
+
+params:
+    aptID: int
+    userID: int
+returns:
+    error or status code of 200 if successful
+*/
 app.post('/user-unbook', (req, response) => {
     let aptID = req.body.aptID
     let userID = req.body.userID
@@ -270,13 +304,13 @@ Delete an appointment
 
 Item/Experience (User/Admin)
 Add an item/experience
-View items /experiences
+    View items /experiences
 Update an item/experience
 Delete an item /experience
 
 Comment/Status/Review/etc. (User/Admin)
 Add a Comment/Status/Review/Etc
-View Comment/Status/Review/Etc
+    View Comment/Status/Review/Etc
 Update a Comment/Status/Review/Etc
 Delete a Comment/Status/Review/Etc
 
