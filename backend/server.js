@@ -126,7 +126,7 @@ app.post('/write-review', (req, response) => {
 })
 
 app.get('/get-user-appointments', (req, response) => {
-    let user = req.body.userID
+    let user = req.query.userID
     let query = `WITH THERAPISTS AS (
                     SELECT 
                         USERS.USER_ID AS THERAPIST_ID, 
@@ -177,8 +177,7 @@ app.post('/user-book', (req, response) => {
 
 
 app.get('/get-reviews', (req, response) => {
-    let expID = req.body.expID
-    console.log(expID)
+    let expID = req.query.expID
     let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1;`
     pool.query(query, [expID], (err, res) => {
         if (err) {
