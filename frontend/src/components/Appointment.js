@@ -1,9 +1,13 @@
-import { Grid, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AptFuncContext } from '../context/AptFuncContext';
 import { UserContext } from '../context/UserContext';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import { Grid, Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, Select, MenuItem, FormControl } from "@mui/material"
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function formatAMPM(date) {
     var hours = date.getHours();
@@ -20,16 +24,63 @@ export default function Appointment(props) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ]
-    const { experience_name, appointment_id, therapist_first_name, therapist_last_name, appointment_start_time, appointment_end_time } = props.item
-    const { canBook, canRemove } = props
-    const { handleUserBook, handleUserUnbook, handleAdminDelete } = useContext(AptFuncContext)
+    const { experience_id, experience_name, therapist_id, appointment_id, therapist_first_name, therapist_last_name, appointment_start_time, appointment_end_time } = props.item
+    const { canBook, canRemove, experienceOptions, durationOptions, therapistOptions } = props
+    const { handleUserBook, handleUserUnbook, handleAdminDelete, handleAdminUpdate } = useContext(AptFuncContext)
     const { user } = useContext(UserContext)
+    const [open, setOpen] = useState(false)
+    const [aptData, setAptData] = useState({})
 
+
+    // setting up aptTime display
     const startDate = new Date(appointment_start_time)
     const endDate = new Date(appointment_end_time)
+    const duration = (endDate.getUTCHours() + (endDate.getMinutes() / 60)) - startDate.getUTCHours()
     const startDay = monthNames[startDate.getMonth()] + " " + startDate.getDate()
     const startTime = formatAMPM(startDate)
     const endTime = formatAMPM(endDate)
+    const aptTime = `${startDay} ${startTime} : ${endTime}`
+
+    useEffect(() => {
+        console.log("rendering apt comp")
+        setAptData({
+            experienceID: experience_id,
+            therapistID: therapist_id,
+            startTime: appointment_start_time,
+            duration: duration, // in hours
+        })
+    }, [appointment_start_time, experience_id, therapist_id, duration])
+
+    const handleFormChange = (event) => {
+        setAptData((prev) => {
+            return ({
+                ...prev,
+                [event.target.name]: event.target.value
+            })
+        })
+    }
+
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+        setAptData({
+            experienceID: experience_id,
+            therapistID: therapist_id,
+            startTime: appointment_start_time,
+            duration: endDate.getHours() - startDate.getHours(), // in hours
+        })
+    }
+
+    const handleDone = () => {
+        handleAdminUpdate({
+            appointmentID: appointment_id,
+            ...aptData,
+        })
+        handleClose()
+    }
 
     return (
         <div className="Appointment" style={{
@@ -52,25 +103,103 @@ export default function Appointment(props) {
                 <Grid item xs={2} sx={{ ml: 0 }}>
                     {therapist_first_name + " " + therapist_last_name}
                 </Grid>
-                <Grid item xs={5} sx={{mr:1}}>
-                    {startDay}  {startTime} : {endTime}
+                <Grid item xs={5} sx={{ mr: 1 }}>
+                    {/* {startDay}  {startTime} : {endTime} */}
+                    {aptTime}
                 </Grid>
                 {!user.isAdmin && canBook &&
                     <Grid item xs={1}>
-                        <Button onClick={() => { handleUserBook(appointment_id, user.userID) }} variant="contained" size="small"><AddIcon fontSize="small"/></Button>
+                        <Button onClick={() => { handleUserBook(appointment_id, user.userID) }} variant="contained" size="small"><AddIcon fontSize="small" /></Button>
                     </Grid>
                 }
                 {!user.isAdmin && canRemove &&
                     <Grid item xs={1}>
-                        <Button onClick={() => { handleUserUnbook(appointment_id, user.userID) }} variant="contained" size="small"><DeleteIcon fontSize="small"/></Button>
+                        <Button onClick={() => { handleUserUnbook(appointment_id, user.userID) }} variant="contained" size="small"><DeleteIcon fontSize="small" /></Button>
                     </Grid>
                 }
                 {user.isAdmin &&
                     <Grid item xs={1}>
-                        <Button onClick={() => { handleAdminDelete(appointment_id) }} variant="contained" size="small"><DeleteIcon /></Button>
+                        <div style={{ display: "flex" }}>
+                            <Button style={{ maxWidth: "32px", minWidth: "32px" }} onClick={() => { handleClickOpen() }} variant="contained" size="small"><EditIcon /></Button>
+                            <Button style={{ marginLeft: "2px", maxWidth: "32px", minWidth: "32px" }} onClick={() => { handleAdminDelete(appointment_id) }} variant="contained" size="small"><DeleteIcon /></Button>
+                        </div>
                     </Grid>
                 }
             </Grid>
+
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Add appointment details here.</DialogTitle>
+                <DialogContent>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="experience">Experience</InputLabel>
+                        <Select
+                            id="experience"
+                            name="experienceID"
+                            value={aptData.experienceID}
+                            label="Experience"
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 246 }}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {experienceOptions}
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="therapist">Therapist</InputLabel>
+                        <Select
+                            id="therapist"
+                            name="therapistID"
+                            value={aptData.therapistID}
+                            label="Experience"
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 246 }}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {therapistOptions}
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateTimePicker
+                                label="Choose a start time"
+                                value={aptData.startTime || null}
+                                onChange={(newTime) => setAptData((prev) => {
+                                    return ({
+                                        ...prev,
+                                        startTime: newTime
+                                    })
+                                })}
+                                renderInput={(params) => <TextField {...params} />}
+                                id="startTime"
+                            />
+                        </LocalizationProvider>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 120 }} >
+                        <InputLabel id="duration">Duration</InputLabel>
+                        <Select
+                            id="duration"
+                            name="duration"
+                            value={aptData.duration}
+                            label="Duration"
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 246 }}
+                            defaultValue=""
+                        >
+                            {durationOptions}
+                        </Select>
+                    </FormControl>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleDone}>Done</Button>
+                </DialogActions>
+            </Dialog>
+
         </div>
     )
 }

@@ -13,10 +13,13 @@ const StyledTextField = styled(TextField)({
         borderBottomColor: 'rgb(171, 174, 178)',
     },
     '&:hover .MuiInput-underline:before': {
-        borderBottomColor: 'rgb(171, 174, 178)',
+        borderBottomColor: 'white',
     },
     '& label': {
         color: 'rgb(171, 174, 178)',
+    },
+    '&:hover label': {
+        color: 'white',
     },
     '& input': {
         color: 'rgb(171, 174, 178)',

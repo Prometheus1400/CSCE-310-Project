@@ -90,11 +90,16 @@ function AppointmentPage() {
         console.log("handleAdminDelete()", aptInfo)
     }
 
+    const handleAdminUpdate = (aptInfo) => {
+        console.log("handleAdminUpdate", aptInfo)
+    }
+
     const handles = {
         handleUserBook,
         handleUserUnbook,
         handleAdminDelete,
         handleAdminAdd,
+        handleAdminUpdate,
     }
 
     return (

@@ -21,27 +21,27 @@ function AppointmentList(props) {
         duration: "", // in hours
         comments: "",
     })
-    const durations = [0.5, 1, 2, 3]
+    const durations = [0.5, 0.75, 1, 1.5, 2, 3]
 
 
     const experiences = [
         {
-            experienceID: 1,
-            experienceName: "group session"
+            experienceID: 4,
+            experienceName: "experience 1"
         },
         {
-            experienceID: 2,
-            experienceName: "individual session"
+            experienceID: 5,
+            experienceName: "experience 2"
         },
     ]
 
     const therapists = [
         {
-            therapistID: 1,
+            therapistID: 33,
             therapistName: "tyler woods"
         },
         {
-            therapistID: 2,
+            therapistID: 34,
             therapistName: "dick chaineey"
         },
     ]
@@ -77,18 +77,6 @@ function AppointmentList(props) {
     }
 
     let count = 0
-    const aptComponents = apts.map((a) => {
-        count++
-        return (
-            <Appointment
-                item={a}
-                key={count}
-                canBook={true}
-                canRemove={false}
-            />
-        )
-    })
-
     const experienceOptions = experiences.map((exp) => {
         count++
         return (
@@ -103,7 +91,7 @@ function AppointmentList(props) {
 
     const durationOptions = durations.map((dur) => {
         count++
-        const displayStr = dur === 0.5 ? "30 minutes" : dur + " hours"
+        const displayStr = dur === 0.5 ? "30 minutes" : dur === 0.75 ? " 45 minutes" : dur + " hours"
 
         return (
             <MenuItem
@@ -124,6 +112,21 @@ function AppointmentList(props) {
             >
                 {thpst.therapistName}
             </MenuItem>
+        )
+    })
+
+    const aptComponents = apts.map((a) => {
+        count++
+        return (
+            <Appointment
+                item={a}
+                key={count}
+                canBook={true}
+                canRemove={false}
+                experienceOptions={experienceOptions}
+                durationOptions={durationOptions}
+                therapistOptions={therapistOptions}
+            />
         )
     })
 
@@ -210,9 +213,6 @@ function AppointmentList(props) {
                             sx={{ minWidth: 246 }}
                             defaultValue=""
                         >
-                            {/* <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem> */}
                             {durationOptions}
                         </Select>
                     </FormControl>
