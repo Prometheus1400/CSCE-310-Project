@@ -6,15 +6,12 @@ export default function ExperienceButtons(props){
     const {exps} = props
     const {updateExperiences} = props
     
-    
-    console.log(exps)
 
-    
     const expButton = exps.map((exp) => {
         return (
             <Button
                 value={exp.experience_id}
-                onClick= { () => updateExperiences()}
+                onClick= { () => updateExperiences(exp.experience_id)}
                 variant="contained"
                 size='large'
             >{exp.experience_name}

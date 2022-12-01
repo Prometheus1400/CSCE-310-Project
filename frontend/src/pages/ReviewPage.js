@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Grid, TextField, Button } from '@mui/material';
 import axios from "axios"
 import ExperienceButtons from "../components/ReviewPage/ExperienceButtons";
+import Reviews from "../components/ReviewPage/Reviews";
 
 
 function ReviewPage() {
 
     const [experienceID, setExperienceID] = useState("");
     const [exps, setExps] = useState([])
+    const [expReview, setExpReview] = useState([])
     const [review, setReview] = useState("");
     const [rating, setRating] = useState("");
 
@@ -28,36 +30,31 @@ function ReviewPage() {
             review: review,
             expID: experienceID,
             userID: "35"
-        };
-        console.log(exps)
-        /*
+        };        
         axios
             .post("/write-review", data)
             .then(res => console.log(res))
             .catch(err => console.log(err));
-            */
     };
 
     
-    const updateExperiences = ({ target }) => {
-        console.log("HERE")
-        setExperienceID(target.value);
-        console.log(exps)
+    const updateExperiences = ( target ) => {
+        setExperienceID(target)
         axios
             .get("/get-reviews", {
                 params: {
                     expID: experienceID
                 }
             })
-            .then((res) => {
+            .then((resp) => {
                 //Do summin
+                setExpReview(resp.data.reviews)
+
             })
             .catch(err => console.log(err));
     };
     
     const getExperiences = () =>{
-        console.log("LKDJFKJSDKJF")
-        /*
         axios
         .get("/get-experiences")
         .then((resp) => {
@@ -65,7 +62,6 @@ function ReviewPage() {
             setExps(resp.data.experiences)
         })
         .catch(err => console.log(err));
-        */
     };
         
     useEffect(() => {
@@ -81,6 +77,7 @@ function ReviewPage() {
             </Grid>
             <Grid item xs={3}>
                 <h3>Reviews</h3>
+                <Reviews expReview = {expReview}></Reviews>
                 <h3>Write a Review</h3>
                 <TextField
                     id="outlined-multiline-static"

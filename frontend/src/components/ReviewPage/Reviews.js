@@ -1,41 +1,37 @@
-import { Grid, Button } from '@mui/material';
 
+export default function Reviews(props){
 
+    const {expReview} = props
+    console.log("EXP REVIEW", expReview)
 
-export default function Reviews(){
+    
+    const expReviews = expReview?.map((rev) => {
+        console.log(rev)
+        return (
+            <>
+            <h3>Rating: {rev.rating}</h3>
+            <h3>Review: {rev.review}</h3>
+            </>
+        )
+    });
+    
+    
 
-    const experienceName = ["cucking", "sadd", "dass"];
-    const therapistName = ["may", "saad", "pail"];
-    const startTime = ["1", "2", "3"];
+    if (expReview === undefined){
+        return(
 
-    return(
-        <div className="Reviews" style={{
-            width: "280px",
-            fontSize: "10px",
-            borderRadius: "10px",
-            backgroundColor: "lightblue",
-            paddingTop: "5px",
-            paddingLeft: "10px",
-            paddingBottom: "5px",
-            marginTop: "2px"
-        }}>
-            <Grid container spacing={0} direction="row" justifyContent="center" alignItems="center">
-                <Grid item xs={3}>
-                    {experienceName}
-                </Grid>
-                <Grid item xs={3}>
-                    {therapistName}
-                </Grid>
-                <Grid item xs={3}>
-                    {startTime}
-                </Grid>
-                <Grid item xs={3}>
-                        <Button variant="contained" size="small">book</Button>
-                </Grid>
-                <Grid item xs={3}>
-                        <Button variant="contained" size="small">delete</Button>
-                </Grid>
-            </Grid>
-        </div>
-    )
+            <div className = "Button">
+                <h1>F</h1>
+            </div>
+        )
+    }
+    else{
+        return(
+            <div className = "Button">
+                <h1>{expReviews}</h1>
+            </div>
+
+        )
+    }
+
 }
