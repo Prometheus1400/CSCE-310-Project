@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, TextField, Button } from '@mui/material';
 import axios from "axios"
 import ExperienceButtons from "../components/ReviewPage/ExperienceButtons";
 import Reviews from "../components/ReviewPage/Reviews";
+import "../styles/HomePage.css"
 
 
 function ReviewPage() {
@@ -35,6 +36,10 @@ function ReviewPage() {
             .post("/write-review", data)
             .then(res => console.log(res))
             .catch(err => console.log(err));
+
+
+        setRating("")
+        setReview("")
     };
 
     
@@ -72,15 +77,16 @@ function ReviewPage() {
     return (
         <Grid container spacing={0} direction="row" justifyContent="center" alignItems="center">
             <Grid item xs={6}>
-                <h3>Select an Experience:</h3>
+                <h3 className="textHeaders">Select an Experience:</h3>
                 <ExperienceButtons exps={exps} updateExperiences={updateExperiences}></ExperienceButtons>
             </Grid>
             <Grid item xs={3}>
-                <h3>Reviews</h3>
+                <h3 className="textHeaders">Reviews</h3>
                 <Reviews expReview = {expReview}></Reviews>
-                <h3>Write a Review</h3>
+                <h3 className="textHeaders">Write a Review</h3>
                 <TextField
                     id="outlined-multiline-static"
+                    className = "ratingBox"
                     label="Review"
                     fullWidth
                     multiline
@@ -90,7 +96,9 @@ function ReviewPage() {
                 />
                 <TextField
                     id="outlined-multiline-static"
+                    className = "ratingBox"
                     label="Rating (0-10)"
+                    color = "primary"
                     fullWidth
                     multiline
                     onChange={handleRatingChange} 

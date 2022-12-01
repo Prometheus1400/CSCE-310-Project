@@ -1,3 +1,5 @@
+import { Grid, Container } from '@mui/material';
+import { fontSize } from '@mui/system';
 
 export default function Reviews(props){
 
@@ -9,8 +11,19 @@ export default function Reviews(props){
         console.log(rev)
         return (
             <>
-            <h3>Rating: {rev.rating}</h3>
-            <h3>Review: {rev.review}</h3>
+            <Container className="ReviewBox" maxWidth="lg" sx={{
+                color: 'rgb(0, 0, 0)',
+                backgroundColor: 'rgb(197, 197, 197)',
+                fontSize: '10px',
+                padding: "10px",
+                textAlign: "center",
+                borderRadius: "10px 10px 10px 10px",
+                width: "auto",
+                margin: "10px",
+            }}>
+                Rating: {rev.rating} <br></br>
+                Review: {rev.review}
+            </Container>
             </>
         )
     });
