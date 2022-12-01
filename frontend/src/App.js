@@ -1,16 +1,20 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import HomePage from "./pages/HomePage";
 import { Route, Routes, Outlet, BrowserRouter } from "react-router-dom"
 import LoginPage from "./components/LogPage/LoginPage"
 import SigninPage from "./components/LogPage/SigninPage"
 import Navbar from "./components/Navbar";
-import ApppointmentPage from "./pages/AppointmentPage";
+import AppointmentPage from "./pages/AppointmentPage";
 import ReviewPage from "./pages/ReviewPage";
 import UserPage from "./pages/UserPage";
 import { UserContext } from "./context/UserContext";
+import usePersistentState from "./hooks/usePersistentState";
 
 function App() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = usePersistentState("user", {
+    userID:"",
+    isAdmin:false,
+  })
   const userValue = useMemo(() => ({ user, setUser }), [user, setUser])
 
   return (
@@ -25,7 +29,7 @@ function App() {
               <Outlet />
             </div>}>
               <Route path="/home" element={<HomePage />} />
-              <Route path="/appointments" element={<ApppointmentPage />} />
+              <Route path="/appointments" element={<AppointmentPage />} />
               <Route path="/reviews" element={<ReviewPage />} />
               <Route path="/users" element={<UserPage />} />
             </Route>
