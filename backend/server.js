@@ -31,6 +31,15 @@ pool.connect()
 // start listening
 app.listen(PORT, () => console.log('Server on PORT: ' + PORT))
 
+
+/*
+gets all users from the users table
+
+params:
+    none
+returns:
+    array of dictionaries containing user information
+*/
 app.get('/users', (req, response) => {
     pool.query('SELECT * FROM USERS', (err, res) => {
         if (err) {
@@ -41,6 +50,15 @@ app.get('/users', (req, response) => {
     })
 })
 
+/*
+logs a user into the website
+
+params:
+    email: String
+    password: String
+returns:
+    dictionary containing an error if it occured, if the user exists, the user ID if signin was successful, and if the user is an admin
+*/
 app.get('/login', (req, response) => {
     let email = req.query.email
     let password = req.query.password
@@ -57,6 +75,19 @@ app.get('/login', (req, response) => {
     })
 })
 
+/*
+creates a user account
+
+params:
+    email: String
+    password: String
+    phone: String
+    fname: String
+    lname: String
+    isTherapist: bool
+returns:
+    status of 200 if successful, else returns error
+*/
 app.post('/createAccount', (req, response) => {
     let email = req.body.email
     let password = req.body.password
@@ -74,6 +105,14 @@ app.post('/createAccount', (req, response) => {
     })
 })
 
+/*
+gets all appointments with their assigned therapist
+
+params:
+    none
+returns:
+    array of dictionaries containing all appointments including id, experience, therapist, and times
+*/
 app.get('/get-appointments', (req, response) => {
     let query = `SELECT 
                     APPOINTMENT_ID,
@@ -96,7 +135,14 @@ app.get('/get-appointments', (req, response) => {
     })
 })
 
+/*
+gets all experiences from the experiences table
 
+params:
+    none
+returns:
+    array of dictionaries containing all experience names and IDs
+*/
 app.get('/get-experiences', (req, response) => {
     let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID FROM EXPERIENCES`
     pool.query(query, (err, res) => {
@@ -108,6 +154,14 @@ app.get('/get-experiences', (req, response) => {
     })
 })
 
+/*
+submits a review to the reviews table
+
+params:
+    none
+returns:
+    array of dictionaries containing user information
+*/
 app.post('/write-review', (req, response) => {
     let rating = req.body.rating
     let review = req.body.review
@@ -125,6 +179,14 @@ app.post('/write-review', (req, response) => {
     })
 })
 
+/*
+gets all appointments for a specific user
+
+params:
+    userID: int
+returns:
+    array of dictionaries containing users appointments, including therapist, time, experience
+*/
 app.get('/get-user-appointments', (req, response) => {
     let user = req.query.userID
     let query = `WITH THERAPISTS AS (
@@ -161,6 +223,15 @@ app.get('/get-user-appointments', (req, response) => {
     })
 })
 
+/*
+adds a user to an appointment
+
+params:
+    aptID: int
+    userID: int
+returns:
+    array of dictionaries containing user information
+*/
 app.post('/user-book', (req, response) => {
     let aptID = req.body.aptID
     let userID = req.body.userID
@@ -175,7 +246,14 @@ app.post('/user-book', (req, response) => {
     })
 })
 
+/*
+gets all reviews for an experience
 
+params:
+    expID: int
+returns:
+    array of dictionaries containing ratings for specific experience
+*/
 app.get('/get-reviews', (req, response) => {
     let expID = req.query.expID
     let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1;`
@@ -188,6 +266,15 @@ app.get('/get-reviews', (req, response) => {
     })
 })
 
+/*
+removes user from an appointment
+
+params:
+    aptID: int
+    userID: int
+returns:
+    error or status code of 200 if successful
+*/
 app.post('/user-unbook', (req, response) => {
     let aptID = req.body.aptID
     let userID = req.body.userID
