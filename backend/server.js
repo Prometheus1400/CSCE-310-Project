@@ -302,10 +302,10 @@ returns:
     error or status code of 200 if successful
 */
 app.post('/create-experience', (req, response) => {
-    let name = req.query.name
-    let price = req.query.price
-    let length = req.query.length
-    let description = req.query.description
+    let name = req.body.name
+    let price = req.body.price
+    let length = req.body.length
+    let description = req.body.description
 
     let query = `INSERT INTO EXPERIENCES(EXPERIENCE_NAME, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION)
                 VALUES($1, $2, $3, $4)`
@@ -333,11 +333,11 @@ returns:
     error or status code of 200 if successful
 */
 app.post('/update-experience', (req, response) => {
-    let name = req.query.name
-    let price = req.query.price
-    let length = req.query.length
-    let description = req.query.description
-    let expID = req.query.expID
+    let name = req.body.name
+    let price = req.body.price
+    let length = req.body.length
+    let description = req.body.description
+    let expID = req.body.expID
 
     let query = `UPDATE EXPERIENCES SET `
     if(name) query += `EXPERIENCE_NAME = '${name}',`
@@ -366,7 +366,7 @@ returns:
     error or status code of 200 if successful
 */
 app.post('/delete-experience', (req, response) => {
-    let expID = req.query.expID
+    let expID = req.body.expID
 
     let query = `DELETE FROM EXPERIENCES WHERE EXPERIENCE_ID = $1`
     pool.query(query, [expID], (err, res) => {
