@@ -1,14 +1,18 @@
-import { Grid, Container } from '@mui/material';
-import { fontSize } from '@mui/system';
+import { Container } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit';
+import { useContext } from "react"
+import { UserContext } from "../../context/UserContext"
 
 export default function Reviews(props){
 
-    const {expReview} = props
-    console.log("EXP REVIEW", expReview)
+    const { expReview } = props
+    const { deleteReview } = props
+    const { updateReview } = props
+    const { user } = useContext(UserContext)
 
     
     const expReviews = expReview?.map((rev) => {
-        console.log(rev)
         return (
             <>
             <Container className="ReviewBox" maxWidth="lg" sx={{
@@ -21,7 +25,26 @@ export default function Reviews(props){
                 width: "auto",
                 margin: "10px",
             }}>
-                Rating: {rev.rating} <br></br>
+                Rating: {rev.rating} 
+                {(user.isAdmin || user.userID === rev.user_id) &&
+                    <>
+                    <EditIcon fontSize="small"
+                        onClick={() => updateReview(rev.review_id)}
+                        variant="contained"
+                        size="small"
+                        sx={{
+                            float: 'right'
+                     }}/>
+                    <DeleteIcon fontSize="small"
+                        onClick={() => deleteReview(rev.review_id)}
+                        variant="contained"
+                        size="small"
+                        sx={{
+                            float: 'right'
+                        }} />
+                    </>
+                }
+                <br></br>
                 Review: {rev.review}
             </Container>
             </>
@@ -34,7 +57,7 @@ export default function Reviews(props){
         return(
 
             <div className = "Button">
-                <h1>F</h1>
+                <h1 className="textHeaders"> ... </h1>
             </div>
         )
     }

@@ -11,7 +11,7 @@ export default function ExperienceButtons(props){
         return (
             <Button
                 value={exp.experience_id}
-                onClick= { () => updateExperiences(exp.experience_id)}
+                onClick= { () => updateExperiences(exp.experience_id, exp.experience_name)}
                 variant="contained"
                 size='large'
             >{exp.experience_name}

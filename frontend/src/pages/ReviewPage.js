@@ -4,15 +4,19 @@ import axios from "axios"
 import ExperienceButtons from "../components/ReviewPage/ExperienceButtons";
 import Reviews from "../components/ReviewPage/Reviews";
 import "../styles/HomePage.css"
+import { useContext } from "react"
+import { UserContext } from "../context/UserContext"
 
 
 function ReviewPage() {
 
-    const [experienceID, setExperienceID] = useState("");
+    const [experienceID, setExperienceID] = useState("")
+    const [experienceName, setExperienceName] = useState("")
     const [exps, setExps] = useState([])
     const [expReview, setExpReview] = useState([])
-    const [review, setReview] = useState("");
-    const [rating, setRating] = useState("");
+    const [review, setReview] = useState("")
+    const [rating, setRating] = useState("")
+    const { user } = useContext(UserContext)
 
 
     const handleReviewChange = ({ target }) => {
@@ -30,7 +34,7 @@ function ReviewPage() {
             rating: rating,
             review: review,
             expID: experienceID,
-            userID: "35"
+            userID: user.userID
         };        
         axios
             .post("/write-review", data)
@@ -42,9 +46,19 @@ function ReviewPage() {
         setReview("")
     };
 
+    const deleteReview = ( target ) => {
+        console.log(target)
+    }
+
+    const updateReview = ( target ) => {
+        console.log(user.userID, target)
+    }
+
     
-    const updateExperiences = ( target ) => {
-        setExperienceID(target)
+    const updateExperiences = ( id, name ) => {
+        setExperienceID(id)
+        setExperienceName(name)
+        console.log(user)
         axios
             .get("/get-reviews", {
                 params: {
@@ -76,35 +90,32 @@ function ReviewPage() {
 
     return (
         <Grid container spacing={0} direction="row" justifyContent="center" alignItems="center">
-            <Grid item xs={6}>
+            <Grid item xs={5}>
                 <h3 className="textHeaders">Select an Experience:</h3>
                 <ExperienceButtons exps={exps} updateExperiences={updateExperiences}></ExperienceButtons>
+                <h3 className="textHeaders">Reviews for {experienceName}</h3>
+                <Reviews expReview = {expReview} deleteReview={deleteReview} updateReview={updateReview}></Reviews>
             </Grid>
-            <Grid item xs={3}>
-                <h3 className="textHeaders">Reviews</h3>
-                <Reviews expReview = {expReview}></Reviews>
-                <h3 className="textHeaders">Write a Review</h3>
-                <TextField
-                    id="outlined-multiline-static"
-                    className = "ratingBox"
-                    label="Review"
-                    fullWidth
-                    multiline
-                    rows={10}
-                    onChange={handleReviewChange} 
-                    value={review}
-                />
-                <TextField
-                    id="outlined-multiline-static"
-                    className = "ratingBox"
-                    label="Rating (0-10)"
-                    color = "primary"
-                    fullWidth
-                    multiline
-                    onChange={handleRatingChange} 
-                    value={rating}
-                />
-                <Button variant="contained" onClick={postReview}>Post Review</Button>
+            <Grid item xs={5}>
+                {!user.isAdmin &&
+                    <><h3 className="textHeaders">Write or Edit a Review</h3><TextField
+                        id="outlined-multiline-static"
+                        className="ratingBox"
+                        label="Review"
+                        fullWidth
+                        multiline
+                        rows={10}
+                        onChange={handleReviewChange}
+                        value={review} /><TextField
+                            id="outlined-multiline-static"
+                            className="ratingBox"
+                            label="Rating (0-10)"
+                            color="primary"
+                            fullWidth
+                            multiline
+                            onChange={handleRatingChange}
+                            value={rating} /><Button variant="contained" onClick={postReview}>Post Review</Button></>
+                }
             </Grid>
         </Grid>
     )
