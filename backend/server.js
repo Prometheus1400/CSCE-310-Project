@@ -274,11 +274,11 @@ app.get('/get-therapists', (req, response) => {
                 FROM USERS
                 WHERE IS_THERAPIST = TRUE`
     pool.query(query, (err, res) => {
-        if(err) {
-            response.json({err: err})
+        if (err) {
+            response.json({ err: err })
             return
         }
-        response.json({therapists: res.rows})
+        response.json({ therapists: res.rows })
     })
 })
 
@@ -305,6 +305,90 @@ app.post('/user-unbook', (req, response) => {
     })
 })
 
+/*
+creates an appointment
+
+params:
+    expID: int
+    startTime: String
+        format: 'yyyy-mm-dd hh:mm:ss'
+    comments: String
+    therapistID: int
+returns:
+    error or status code 200 if successful
+*/
+app.post('/create-appointment', (req, response) => {
+    let expID = req.body.experienceID
+    let startTime = req.body.startTime
+    let comments = req.body.comments
+    let therapistID = req.body.therapistID
+
+    let query = `WITH CREATE_APT AS (
+                    INSERT INTO APPOINTMENTS(EXPERIENCE_ID, APPOINTMENT_START_TIME, COMMENTS) VALUES ($1, $2::TIMESTAMP, $3) RETURNING APPOINTMENT_ID
+                )
+                INSERT INTO USER_APPOINTMENTS(APPOINTMENT_ID, USER_ID)
+                SELECT APPOINTMENT_ID, $4 FROM CREATE_APT;`
+    pool.query(query, [expID, startTime, comments, therapistID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
+
+/*
+updates an appointment
+
+params:
+    apptID: int
+    expID: int
+    startTime: String
+        format: 'yyyy-mm-dd hh:mm:ss'
+    comments: String
+returns:
+    error or status code 200 if successful
+*/
+app.post('/update-appointment', (req, response) => {
+    let expID = req.body.experienceID
+    let startTime = req.body.startTime
+    let comments = req.body.comments
+    let apptID = req.body.appointmentID
+
+    let query = `UPDATE APPOINTMENTS 
+                SET EXPERIENCE_ID = $1, APPOINTMENT_START_TIME = $2::TIMESTAMP, COMMENTS = $3 WHERE APPOINTMENT_ID = $4`
+    pool.query(query, [expID, startTime, comments, apptID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
+
+/*
+deletes an appointment
+
+params:
+    apptID: int
+returns:
+    error or status code 200 if successful
+*/
+app.post('/delete-appointment', (req, response) => {
+    let apptID = req.body.appointmentID
+
+    let query = `DELETE FROM APPOINTMENTS WHERE APPOINTMENT_ID = $1`
+    pool.query(query, [apptID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
 /*
 creates a new experience
 
@@ -333,7 +417,7 @@ app.post('/create-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-})
+}
 
 /*
 updates an experience
@@ -356,10 +440,10 @@ app.post('/update-experience', (req, response) => {
     let expID = req.body.expID
 
     let query = `UPDATE EXPERIENCES SET `
-    if(name) query += `EXPERIENCE_NAME = '${name}',`
-    if(price) query += `EXPERIENCE_PRICE = ${price},`
-    if(length) query += `EXPERIENCE_LENGTH = '${length}',`
-    if(description) query += `EXPERIENCE_DESCRIPTION = '${description}',`
+    if (name) query += `EXPERIENCE_NAME = '${name}',`
+    if (price) query += `EXPERIENCE_PRICE = ${price},`
+    if (length) query += `EXPERIENCE_LENGTH = '${length}',`
+    if (description) query += `EXPERIENCE_DESCRIPTION = '${description}',`
     query = query.slice(0, -1)
     query += ` WHERE EXPERIENCE_ID = $1`
 
@@ -371,7 +455,7 @@ app.post('/update-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-})
+}
 
 /*
 deletes and experience
@@ -393,8 +477,7 @@ app.post('/delete-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-})
-
+}
 
 /*
 Profile (User/Admin)
