@@ -302,7 +302,7 @@ returns:
     error or status code 200 if successful
 */
 app.post('/create-appointment', (req, response) => {
-    let expID = req.body.expID
+    let expID = req.body.experienceID
     let startTime = req.body.startTime
     let comments = req.body.comments
     let therapistID = req.body.therapistID
@@ -335,10 +335,10 @@ returns:
     error or status code 200 if successful
 */
 app.post('/update-appointment', (req, response) => {
-    let expID = req.body.expID
+    let expID = req.body.experienceID
     let startTime = req.body.startTime
     let comments = req.body.comments
-    let apptID = req.body.apptID
+    let apptID = req.body.appointmentID
 
     let query = `UPDATE APPOINTMENTS 
                 SET EXPERIENCE_ID = $1, APPOINTMENT_START_TIME = $2::TIMESTAMP, COMMENTS = $3 WHERE APPOINTMENT_ID = $4`
@@ -361,7 +361,7 @@ returns:
     error or status code 200 if successful
 */
 app.post('/delete-appointment', (req, response) => {
-    let apptID = req.body.apptID
+    let apptID = req.body.appointmentID
 
     let query = `DELETE FROM APPOINTMENTS WHERE APPOINTMENT_ID = $1`
     pool.query(query, [apptID], (err, res) => {
