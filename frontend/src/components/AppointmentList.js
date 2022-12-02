@@ -68,12 +68,27 @@ function AppointmentList(props) {
     };
 
     const handleSubmit = () => {
+        // convert date object to sql time stamp
+        const date = new Date(formData.startTime)
+        const timeStamp = date.getUTCFullYear() + '-' +
+            ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
+            ('00' + date.getUTCDate()).slice(-2) + ' ' +
+            ('00' + date.getUTCHours()).slice(-2) + ':' +
+            ('00' + date.getUTCMinutes()).slice(-2) + ':' +
+            ('00' + date.getUTCSeconds()).slice(-2);
+
         // send post request
         if (!editMode) {
-            handleAdminAdd(formData)
+            handleAdminAdd({
+                ...formData,
+                startTime: timeStamp,
+            })
         } else {
-            delete formData.comments
-            handleAdminUpdate(formData)
+            // delete formData.comments
+            handleAdminUpdate({
+                ...formData,
+                startTime: timeStamp,
+            })
         }
         handleClose()
     }
@@ -95,10 +110,10 @@ function AppointmentList(props) {
         count++
         return (
             <MenuItem
-                value={thpst.therapistID}
+                value={thpst.therapist_id}
                 key={count}
             >
-                {thpst.therapistName}
+                {thpst.therapist_first_name + " " + thpst.therapist_last_name}
             </MenuItem>
         )
     })

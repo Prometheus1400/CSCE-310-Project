@@ -16,7 +16,7 @@ function AppointmentPage() {
     const { user } = useContext(UserContext)
 
 
-    const getAppointments = () => {
+    const getAppointments = async () => {
         axios.get("/get-appointments"
         ).then((resp) => {
             console.log("got appointments")
@@ -27,7 +27,7 @@ function AppointmentPage() {
         })
     }
 
-    const getUserAppointments = useCallback(() => {
+    const getUserAppointments = useCallback(async () => {
         !user.isAdmin && axios.get("/get-user-appointments", {
             params: {
                 userID: user.userID,
@@ -59,8 +59,8 @@ function AppointmentPage() {
 
         console.log("appointmentPage useEffect()", user)
         getAppointments()
-        getUserAppointments()
         getExperiences()
+        getUserAppointments()
         // user.isAdmin = true
     }, [getUserAppointments, user])
 
@@ -93,20 +93,45 @@ function AppointmentPage() {
             .catch(err => console.log(err))
     }
 
-    const handleAdminDelete = (aptID) => {
-        console.log("handleAdminDelete()", aptID)
-        //TODO: send post request, update appointments
-    }
 
     const handleAdminAdd = (aptInfo) => {
-        console.log(typeof (aptInfo.startTime))
-        console.log("handleAdminDelete()", aptInfo)
-        //TODO: send post request, update appointments
+        console.log("handleAdminAdd()", aptInfo)
+        axios.post("/create-appointment", aptInfo)
+            .then(resp => {
+                console.log(resp)
+                getAppointments()
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     const handleAdminUpdate = (aptInfo) => {
         console.log("handleAdminUpdate", aptInfo)
         //TODO: send post request, update appointments
+        axios.post("/update-appointment", aptInfo)
+            .then(resp => {
+                console.log(resp)
+                getAppointments()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    const handleAdminDelete = (aptID) => {
+        console.log("handleAdminDelete()", aptID)
+        //TODO: send post request, update appointments
+        axios.post("/update-appointment", {
+            appointmentID: aptID,
+        })
+            .then(resp => {
+                console.log(resp)
+                getAppointments()
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     const handleAdminAddExp = (exp) => {
@@ -141,6 +166,9 @@ function AppointmentPage() {
             .then(resp => {
                 console.log(resp)
                 getExperiences()
+                // requery appointments in case removing some experiences
+                // also removed some appointments
+                getAppointments()
             })
             .catch(err => {
                 console.log(err)
@@ -165,7 +193,7 @@ function AppointmentPage() {
             justifyContent: "center",
         }}>
             <AptFuncContext.Provider value={handles}>
-                <AppointmentList apts={apts} experiences={experiences}/>
+                <AppointmentList apts={apts} experiences={experiences} />
                 {!user.isAdmin &&
                     <UserAppointmentList userApts={userApts} />
                 }

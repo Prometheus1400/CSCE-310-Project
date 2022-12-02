@@ -1,5 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AptFuncContext } from '../context/AptFuncContext';
 import { UserContext } from '../context/UserContext';
 import AddIcon from '@mui/icons-material/Add';
@@ -21,11 +21,13 @@ export default function Appointment(props) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ]
-    const { experience_id, experience_name, therapist_id, appointment_id, therapist_first_name, therapist_last_name, appointment_start_time, appointment_end_time } = props.item
+    const { experience_id, experience_name, therapist_id, appointment_id, therapist_first_name, therapist_last_name, appointment_start_time, appointment_end_time, comments } = props.item
     const { canBook, canRemove, } = props
     const { setFormData, setOpen, setEditMode } = props
     const { handleUserBook, handleUserUnbook, handleAdminDelete } = useContext(AptFuncContext)
     const { user } = useContext(UserContext)
+    const [descOpen, setDescOpen] = useState(false)
+
 
 
     // setting up aptTime display
@@ -55,7 +57,7 @@ export default function Appointment(props) {
             fontSize: "10px",
             borderRadius: "10px",
             paddingTop: "5px",
-            paddingBottom: "5px",
+            paddingBottom: descOpen ? "0px" : "5px",
             marginTop: "5px",
             backgroundColor: "rgb(37, 43, 50)",
             boxShadow: "0.5px 1.5px 2px 0.5px black",
@@ -64,7 +66,7 @@ export default function Appointment(props) {
                 ml: -2,
                 color: "rgb(203, 207, 211)",
             }}>
-                <Grid item xs={2}>
+                <Grid item xs={2} onClick={ () => {setDescOpen( prev => !prev)}}>
                     {experience_name}
                 </Grid>
                 <Grid item xs={2} sx={{ ml: 0 }}>
@@ -92,6 +94,16 @@ export default function Appointment(props) {
                     </Grid>
                 }
             </Grid>
+            {descOpen && <div style={{
+                backgroundColor: "rgb(21, 101, 192)",
+                paddingBottom: "5px",
+                borderRadius: "0px 0px 10px 10px",
+                paddingTop: "5px",
+                marginTop:"5px"
+            }}>
+                {comments}
+            </div>
+            }
         </div>
     )
 }

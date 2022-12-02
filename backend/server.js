@@ -122,7 +122,8 @@ app.get('/get-appointments', (req, response) => {
                     USER_FIRST_NAME AS THERAPIST_FIRST_NAME,
                     USER_LAST_NAME AS THERAPIST_LAST_NAME,
                     APPOINTMENT_START_TIME,
-                    APPOINTMENT_END_TIME
+                    APPOINTMENT_END_TIME,
+                    COMMENTS
                 FROM APPOINTMENT_INFO_VIEW
                 WHERE IS_THERAPIST = TRUE
                 ORDER BY APPOINTMENT_START_TIME`
@@ -417,7 +418,7 @@ app.post('/create-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-}
+})
 
 /*
 updates an experience
@@ -455,7 +456,7 @@ app.post('/update-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-}
+})
 
 /*
 deletes and experience
@@ -477,7 +478,7 @@ app.post('/delete-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-}
+})
 
 /*
 Profile (User/Admin)
