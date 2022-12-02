@@ -39,7 +39,7 @@ function ReviewPage() {
         axios
             .post("/write-review", data)
             .then(res => console.log(res))
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
 
 
         setRating("")
@@ -47,7 +47,20 @@ function ReviewPage() {
     };
 
     const deleteReview = ( target ) => {
-        console.log(target)
+        console.log("Deleting Review")
+
+        const data = {
+            revID: target
+        };
+
+        console.log(data)
+
+        axios
+            .post("/delete-review", data)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+
+        updateExperiences(experienceID, experienceName)
     }
 
     const updateReview = ( target ) => {

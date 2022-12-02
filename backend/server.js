@@ -417,7 +417,7 @@ app.post('/create-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-}
+})
 
 /*
 updates an experience
@@ -455,7 +455,7 @@ app.post('/update-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-}
+})
 
 /*
 deletes and experience
@@ -477,7 +477,23 @@ app.post('/delete-experience', (req, response) => {
         }
         response.sendStatus(200)
     })
-}
+})
+
+
+app.post('/delete-review', (req, response) => {
+    let revID = req.body.revID
+    console.log(revID)
+    let query = `DELETE FROM REVIEWS WHERE REVIEW_ID = $1`
+    pool.query(query, [revID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
+
 
 /*
 Profile (User/Admin)
