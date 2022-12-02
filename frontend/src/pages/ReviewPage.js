@@ -52,6 +52,8 @@ function ReviewPage() {
 
     const updateReview = ( target ) => {
         console.log(user.userID, target)
+        //deleteReview(target)
+        //postReview()
     }
 
     
