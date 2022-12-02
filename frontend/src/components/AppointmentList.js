@@ -1,19 +1,22 @@
 import Appointment from "./Appointment"
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { UserContext } from "../context/UserContext"
 import { AptFuncContext } from "../context/AptFuncContext";
 import { Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, Select, MenuItem, FormControl } from "@mui/material"
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import axios from "axios";
 
 
 function AppointmentList(props) {
     // TODO: implement context to get isAdmin state
-    const { apts } = props
+    const { apts, experiences } = props
     const { user } = useContext(UserContext)
-    const { handleAdminAdd } = useContext(AptFuncContext)
-    const [open, setOpen] = useState(false);
+    const { handleAdminAdd, handleAdminUpdate } = useContext(AptFuncContext)
+    const [therapists, setTherapists] = useState([])
+    const [open, setOpen] = useState(false)
+    const [editMode, setEditMode] = useState(false)
     const [formData, setFormData] = useState({
         experienceID: "",
         therapistID: "",
@@ -21,30 +24,23 @@ function AppointmentList(props) {
         duration: "", // in hours
         comments: "",
     })
-    const durations = [0.5, 0.75, 1, 1.5, 2, 3]
 
+    const getTherapists = async () => {
+        axios.get("/get-therapists")
+            .then(resp => {
+                console.log("getTherapists:")
+                console.log(resp)
+                console.log(resp.data.therapists)
+                setTherapists(resp.data.therapists)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
-    const experiences = [
-        {
-            experienceID: 4,
-            experienceName: "experience 1"
-        },
-        {
-            experienceID: 5,
-            experienceName: "experience 2"
-        },
-    ]
-
-    const therapists = [
-        {
-            therapistID: 33,
-            therapistName: "tyler woods"
-        },
-        {
-            therapistID: 34,
-            therapistName: "dick chaineey"
-        },
-    ]
+    useEffect(() => {
+        getTherapists()
+    }, [])
 
     const handleFormChange = (event) => {
         setFormData((prev) => {
@@ -56,16 +52,12 @@ function AppointmentList(props) {
     }
 
     const handleClickOpen = () => {
-        setOpen(true);
+        setOpen(true)
     };
 
     const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleSubmit = () => {
-        // send post request
-        handleAdminAdd(formData)
+        setOpen(false)
+        setEditMode(false)
         setFormData({
             experienceID: '',
             therapistID: "",
@@ -73,6 +65,16 @@ function AppointmentList(props) {
             duration: "",
             comments: "",
         })
+    };
+
+    const handleSubmit = () => {
+        // send post request
+        if (!editMode) {
+            handleAdminAdd(formData)
+        } else {
+            delete formData.comments
+            handleAdminUpdate(formData)
+        }
         handleClose()
     }
 
@@ -81,24 +83,10 @@ function AppointmentList(props) {
         count++
         return (
             <MenuItem
-                value={exp.experienceID}
+                value={exp.experience_id}
                 key={count}
             >
-                {exp.experienceName}
-            </MenuItem>
-        )
-    })
-
-    const durationOptions = durations.map((dur) => {
-        count++
-        const displayStr = dur === 0.5 ? "30 minutes" : dur === 0.75 ? " 45 minutes" : dur + " hours"
-
-        return (
-            <MenuItem
-                value={dur}
-                key={count}
-            >
-                {displayStr}
+                {exp.experience_name}
             </MenuItem>
         )
     })
@@ -123,9 +111,9 @@ function AppointmentList(props) {
                 key={count}
                 canBook={true}
                 canRemove={false}
-                experienceOptions={experienceOptions}
-                durationOptions={durationOptions}
-                therapistOptions={therapistOptions}
+                setFormData={setFormData}
+                setOpen={setOpen}
+                setEditMode={setEditMode}
             />
         )
     })
@@ -137,18 +125,21 @@ function AppointmentList(props) {
             padding: "10px",
             width: "auto",
             margin: "10px",
-            color: "rgb(171, 174, 178)",
+            color: "rgb(243, 246, 249)",
             textAlign: "center",
             borderRadius: "10px 10px 10px 10px",
             position: user.isAdmin ? "static" : "absolute",
             left: "0px",
 
         }}>
-            <h3>Available Appointments &zwnj; &zwnj;
-                {user.isAdmin &&
+            {user.isAdmin &&
+                <h3>Edit Appointments &zwnj; &zwnj;
                     <Button onClick={handleClickOpen} variant="contained" size="small"> add </Button>
-                }
-            </h3>
+                </h3>
+            }
+            {!user.isAdmin &&
+                <h3>Available Appointments</h3>
+            }
 
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add appointment details here.</DialogTitle>
@@ -203,36 +194,26 @@ function AppointmentList(props) {
                         </LocalizationProvider>
                     </FormControl>
                     <FormControl sx={{ m: 1, minWidth: 120 }} >
-                        <InputLabel id="duration">Duration</InputLabel>
-                        <Select
-                            id="duration"
-                            name="duration"
-                            value={formData.duration}
-                            label="Duration"
-                            onChange={handleFormChange}
-                            sx={{ minWidth: 246 }}
-                            defaultValue=""
-                        >
-                            {durationOptions}
-                        </Select>
                     </FormControl>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="comments"
-                        name="comments"
-                        label="Comments"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={formData.comments}
-                        onChange={handleFormChange}
-                        autoComplete="off"
-                    />
+                    {!editMode &&
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="comments"
+                            name="comments"
+                            label="Comments"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={formData.comments}
+                            onChange={handleFormChange}
+                            autoComplete="off"
+                        />
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit}>Add</Button>
+                    <Button onClick={handleSubmit}>Done</Button>
                 </DialogActions>
             </Dialog>
 

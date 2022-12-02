@@ -6,11 +6,13 @@ import axios from "axios"
 import { useContext } from "react"
 import { UserContext } from "../context/UserContext"
 import { useCallback } from "react"
+import ExperienceList from "../components/ExperienceList"
 
 function AppointmentPage() {
 
     const [apts, setApts] = useState([])
     const [userApts, setUserApts] = useState([])
+    const [experiences, setExperiences] = useState([])
     const { user } = useContext(UserContext)
 
 
@@ -39,6 +41,18 @@ function AppointmentPage() {
         })
     }, [user])
 
+    const getExperiences = async () => {
+        axios.get("/get-experiences")
+            .then(resp => {
+                console.log("getExeriences:")
+                console.log(resp.data.experiences)
+                setExperiences(resp.data.experiences)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
     // query to get appointment list and users appointments
     useEffect(() => {
         if (!user || user.userID === '') return
@@ -46,13 +60,11 @@ function AppointmentPage() {
         console.log("appointmentPage useEffect()", user)
         getAppointments()
         getUserAppointments()
+        getExperiences()
         // user.isAdmin = true
     }, [getUserAppointments, user])
 
-    /* TODO:
-     * Make requests send post request to update the database, and then 
-     * re-quiery the userApts
-     */
+
     const handleUserBook = (aptID, userID) => {
         console.log("handleUserBook()", aptID, userID)
         axios.post("/user-book", {
@@ -60,7 +72,7 @@ function AppointmentPage() {
             userID: userID,
         })
             .then(resp => {
-                console.log("handleUserBook:",resp)
+                console.log("handleUserBook:", resp)
                 // re-quiery user's appointments
                 getUserAppointments()
             })
@@ -74,7 +86,7 @@ function AppointmentPage() {
             userID: userID,
         })
             .then(resp => {
-                console.log("handleUserUnbook:",resp)
+                console.log("handleUserUnbook:", resp)
                 // re-quiery user's appointments
                 getUserAppointments()
             })
@@ -83,15 +95,56 @@ function AppointmentPage() {
 
     const handleAdminDelete = (aptID) => {
         console.log("handleAdminDelete()", aptID)
+        //TODO: send post request, update appointments
     }
 
     const handleAdminAdd = (aptInfo) => {
         console.log(typeof (aptInfo.startTime))
         console.log("handleAdminDelete()", aptInfo)
+        //TODO: send post request, update appointments
     }
 
     const handleAdminUpdate = (aptInfo) => {
         console.log("handleAdminUpdate", aptInfo)
+        //TODO: send post request, update appointments
+    }
+
+    const handleAdminAddExp = (exp) => {
+        console.log("handleAdminAddExp()", exp)
+        axios.post("/create-experience", exp)
+            .then(resp => {
+                console.log(resp)
+                getExperiences()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    const handleAdminUpdateExp = (exp) => {
+        console.log("handleAdminUpdateExp()", exp)
+        axios.post("/update-experience", exp)
+            .then(resp => {
+                console.log(resp)
+                getExperiences()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    const handleAdminDeleteExp = (experience_id) => {
+        console.log("handleAdminDeleteExp()", experience_id)
+        axios.post("/delete-experience", {
+            experience_id: experience_id,
+        })
+            .then(resp => {
+                console.log(resp)
+                getExperiences()
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     const handles = {
@@ -100,6 +153,9 @@ function AppointmentPage() {
         handleAdminDelete,
         handleAdminAdd,
         handleAdminUpdate,
+        handleAdminAddExp,
+        handleAdminUpdateExp,
+        handleAdminDeleteExp,
     }
 
     return (
@@ -109,9 +165,12 @@ function AppointmentPage() {
             justifyContent: "center",
         }}>
             <AptFuncContext.Provider value={handles}>
-                <AppointmentList apts={apts} />
+                <AppointmentList apts={apts} experiences={experiences}/>
                 {!user.isAdmin &&
                     <UserAppointmentList userApts={userApts} />
+                }
+                {user.isAdmin &&
+                    <ExperienceList experiences={experiences} />
                 }
             </AptFuncContext.Provider>
         </div>
