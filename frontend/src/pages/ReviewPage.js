@@ -64,9 +64,23 @@ function ReviewPage() {
     }
 
     const updateReview = ( target ) => {
-        console.log(user.userID, target)
-        //deleteReview(target)
-        //postReview()
+        console.log("REVIEW_ID", target)
+
+        const data = {
+            reviewID: target,
+            review: review,
+            rating: rating
+        };
+
+        console.log(data)
+
+        axios
+            .post("/update-review", data)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+
+        updateExperiences(experienceID, experienceName)
+
     }
 
     

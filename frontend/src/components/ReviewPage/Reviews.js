@@ -3,6 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit';
 import { useContext } from "react"
 import { UserContext } from "../../context/UserContext"
+import Rating from "./Rating"
 
 export default function Reviews(props){
 
@@ -25,7 +26,7 @@ export default function Reviews(props){
                 width: "auto",
                 margin: "10px",
             }}>
-                Rating: {rev.rating} 
+                <Rating rating = {rev.rating}></Rating> 
                 {(user.isAdmin || user.userID === rev.user_id) &&
                     <>
                     <EditIcon fontSize="small"
@@ -45,7 +46,7 @@ export default function Reviews(props){
                     </>
                 }
                 <br></br>
-                Review: {rev.review}
+                {rev.review}
             </Container>
             </>
         )
