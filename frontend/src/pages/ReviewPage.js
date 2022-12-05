@@ -127,7 +127,8 @@ function ReviewPage() {
             </Grid>
             <Grid item xs={5}>
                 {!user.isAdmin &&
-                    <><h3 className="textHeaders">Write or Edit a Review</h3><TextField
+                    <><h3 className="textHeaders">Write or Edit a Review</h3>
+                    <TextField
                         id="outlined-multiline-static"
                         className="ratingBox"
                         label="Review"
@@ -144,6 +145,31 @@ function ReviewPage() {
                             multiline
                             onChange={handleRatingChange}
                             value={rating} /><Button variant="contained" onClick={postReview}>Post Review</Button></>
+                }
+                {user.isAdmin &&
+                    <>
+                    <h3 className="textHeaders">Edit a Review</h3>
+                    <TextField
+                        id="outlined-multiline-static"
+                        className="ratingBox"
+                        label="Review"
+                        fullWidth
+                        multiline
+                        rows={10}
+                        onChange={handleReviewChange}
+                        value={review} 
+                    />
+                    <TextField
+                        id="outlined-multiline-static"
+                        className="ratingBox"
+                        label="Rating (0-10)"
+                        color="primary"
+                        fullWidth
+                        multiline
+                        onChange={handleRatingChange}
+                        value={rating} 
+                    />
+                    </>
                 }
             </Grid>
         </Grid>

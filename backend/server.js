@@ -494,7 +494,28 @@ app.post('/delete-review', (req, response) => {
     })
 })
 
+app.post('/update-review', (req, response) => {
 
+    console.log(req)
+    let reviewID = req.body.reviewID
+    let review = req.body.review
+    let rating = req.body.rating
+    console.log(reviewID, review, rating)
+
+    let query = `UPDATE REVIEWS SET `
+    if(review) query += `REVIEW = '${review}',`
+    if(rating) query += `RATING = ${rating},`
+    query += ` REVIEW_DATE = NOW()::DATE WHERE REVIEW_ID = $1`
+
+    pool.query(query, [reviewID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
 /*
 Profile (User/Admin)
     Register a user account
