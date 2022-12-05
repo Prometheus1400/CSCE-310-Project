@@ -51,6 +51,30 @@ app.get('/users', (req, response) => {
 })
 
 /*
+gets user data from user id
+
+params:
+    userID: int
+returns:
+    dictionary containing user data
+*/
+app.get('/get-user', (req, response) => {
+    let userID = req.query.userID
+    let query = `SELECT * FROM USERS WHERE USER_ID = $1`
+    pool.query(query, [userID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            return
+        }
+        if(res.rows.length > 0)
+            response.json({ user: res.rows[0] })
+        else   
+            response.json({ user: undefined })
+    })
+})
+
+
+/*
 logs a user into the website
 
 params:
