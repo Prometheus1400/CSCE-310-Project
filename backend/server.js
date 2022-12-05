@@ -122,7 +122,8 @@ app.get('/get-appointments', (req, response) => {
                     USER_FIRST_NAME AS THERAPIST_FIRST_NAME,
                     USER_LAST_NAME AS THERAPIST_LAST_NAME,
                     APPOINTMENT_START_TIME,
-                    APPOINTMENT_END_TIME
+                    APPOINTMENT_END_TIME,
+                    COMMENTS
                 FROM APPOINTMENT_INFO_VIEW
                 WHERE IS_THERAPIST = TRUE
                 ORDER BY APPOINTMENT_START_TIME`
@@ -144,7 +145,7 @@ returns:
     array of dictionaries containing all experience names and IDs
 */
 app.get('/get-experiences', (req, response) => {
-    let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID FROM EXPERIENCES`
+    let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION FROM EXPERIENCES`
     pool.query(query, (err, res) => {
         if (err) {
             response.json({ err: err })
@@ -402,10 +403,10 @@ returns:
     error or status code of 200 if successful
 */
 app.post('/create-experience', (req, response) => {
-    let name = req.body.name
-    let price = req.body.price
-    let length = req.body.length
-    let description = req.body.description
+    let name = req.body.experience_name
+    let price = req.body.experience_price
+    let length = req.body.experience_length
+    let description = req.body.experience_description
 
     let query = `INSERT INTO EXPERIENCES(EXPERIENCE_NAME, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION)
                 VALUES($1, $2, $3, $4)`
@@ -433,11 +434,11 @@ returns:
     error or status code of 200 if successful
 */
 app.post('/update-experience', (req, response) => {
-    let name = req.body.name
-    let price = req.body.price
-    let length = req.body.length
-    let description = req.body.description
-    let expID = req.body.expID
+    let name = req.body.experience_name
+    let price = req.body.experience_price
+    let length = req.body.experience_length
+    let description = req.body.experience_description
+    let expID = req.body.experience_id
 
     let query = `UPDATE EXPERIENCES SET `
     if (name) query += `EXPERIENCE_NAME = '${name}',`
@@ -466,7 +467,7 @@ returns:
     error or status code of 200 if successful
 */
 app.post('/delete-experience', (req, response) => {
-    let expID = req.body.expID
+    let expID = req.body.experience_id
 
     let query = `DELETE FROM EXPERIENCES WHERE EXPERIENCE_ID = $1`
     pool.query(query, [expID], (err, res) => {
