@@ -39,9 +39,11 @@ params:
     none
 returns:
     array of dictionaries containing user information
+
+author: Sami
 */
 app.get('/users', (req, response) => {
-    pool.query('SELECT * FROM USERS', (err, res) => {
+    pool.query('SELECT * FROM USERS ORDER BY IS_THERAPIST DESC', (err, res) => {
         if (err) {
             response.json({ err: err })
             return
@@ -58,6 +60,8 @@ params:
     password: String
 returns:
     dictionary containing an error if it occured, if the user exists, the user ID if signin was successful, and if the user is an admin
+
+author: Mitchell
 */
 app.get('/login', (req, response) => {
     let email = req.query.email
@@ -87,6 +91,8 @@ params:
     isTherapist: bool
 returns:
     status of 200 if successful, else returns error
+
+author: Mitchell
 */
 app.post('/createAccount', (req, response) => {
     let email = req.body.email
@@ -112,6 +118,8 @@ params:
     none
 returns:
     array of dictionaries containing all appointments including id, experience, therapist, and times
+
+author: Kaleb
 */
 app.get('/get-appointments', (req, response) => {
     let query = `SELECT 
@@ -143,6 +151,8 @@ params:
     none
 returns:
     array of dictionaries containing all experience names and IDs
+
+author: Mitchell
 */
 app.get('/get-experiences', (req, response) => {
     let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION FROM EXPERIENCES ORDER BY EXPERIENCE_PRICE`
@@ -162,6 +172,8 @@ params:
     none
 returns:
     array of dictionaries containing user information
+
+author: Alisa
 */
 app.post('/write-review', (req, response) => {
     let rating = req.body.rating
@@ -187,6 +199,8 @@ params:
     userID: int
 returns:
     array of dictionaries containing users appointments, including therapist, time, experience
+
+author: Sami
 */
 app.get('/get-user-appointments', (req, response) => {
     let user = req.query.userID
@@ -232,6 +246,8 @@ params:
     userID: int
 returns:
     array of dictionaries containing user information
+
+author: Sami
 */
 app.post('/user-book', (req, response) => {
     let aptID = req.body.aptID
@@ -254,6 +270,8 @@ params:
     expID: int
 returns:
     array of dictionaries containing ratings for specific experience
+
+author: Alisa
 */
 app.get('/get-reviews', (req, response) => {
     let expID = req.query.expID
@@ -267,25 +285,6 @@ app.get('/get-reviews', (req, response) => {
     })
 })
 
-/*
-gets all reviews for an experience that admins see (not anonymous)
-
-params:
-    expID: int
-returns:
-    array of dictionaries containing ratings for specific experience
-*/
-app.get('/admin-get-reviews', (req, response) => {
-    let expID = req.query.expID
-    let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1 ORDER BY RATING`
-    pool.query(query, [expID], (err, res) => {
-        if (err) {
-            response.json({ err: err })
-            return
-        }
-        response.json({ reviews: res.rows })
-    })
-})
 
 /*
 gets all the therapists
@@ -294,6 +293,8 @@ params:
     none
 returns:
     array of dictionaries containing therapists
+
+author: Kaleb
 */
 app.get('/get-therapists', (req, response) => {
     let query = `SELECT
@@ -319,6 +320,8 @@ params:
     userID: int
 returns:
     error or status code of 200 if successful
+
+author: Sami
 */
 app.post('/user-unbook', (req, response) => {
     let aptID = req.body.aptID
@@ -345,6 +348,8 @@ params:
     therapistID: int
 returns:
     error or status code 200 if successful
+
+author: Kaleb
 */
 app.post('/create-appointment', (req, response) => {
     let expID = req.body.experienceID
@@ -378,6 +383,8 @@ params:
     comments: String
 returns:
     error or status code 200 if successful
+
+author: Kaleb
 */
 app.post('/update-appointment', (req, response) => {
     let expID = req.body.experienceID
@@ -404,6 +411,8 @@ params:
     apptID: int
 returns:
     error or status code 200 if successful
+
+author: Kaleb
 */
 app.post('/delete-appointment', (req, response) => {
     let apptID = req.body.appointmentID
@@ -429,6 +438,8 @@ params:
     description: String
 returns:
     error or status code of 200 if successful
+
+author: Alisa
 */
 app.post('/create-experience', (req, response) => {
     let name = req.body.experience_name
@@ -459,6 +470,8 @@ params:
     expID: int
 returns:
     error or status code of 200 if successful
+
+author: Alisa
 */
 app.post('/update-experience', (req, response) => {
     let name = req.body.experience_name
@@ -492,6 +505,8 @@ params:
     expID: int
 returns:
     error or status code of 200 if successful
+
+author: Alisa
 */
 app.post('/delete-experience', (req, response) => {
     let expID = req.body.experience_id
@@ -507,29 +522,3 @@ app.post('/delete-experience', (req, response) => {
     })
 })
 
-/*
-Profile (User/Admin)
-    Register a user account
-    Login into the user account
-Update user account profile
-Delete Profile
-
-Schedule (User/Admin)
-    Create an appointment
-    View an appointment
-Update an appointment
-Delete an appointment
-
-Item/Experience (User/Admin)
-Add an item/experience
-    View items /experiences
-Update an item/experience
-Delete an item /experience
-
-Comment/Status/Review/etc. (User/Admin)
-Add a Comment/Status/Review/Etc
-    View Comment/Status/Review/Etc
-Update a Comment/Status/Review/Etc
-Delete a Comment/Status/Review/Etc
-
-*/
