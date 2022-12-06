@@ -62,7 +62,7 @@ returns:
 app.get('/login', (req, response) => {
     let email = req.query.email
     let password = req.query.password
-    pool.query('SELECT USER_ID, IS_ADMIN FROM USERS WHERE USER_EMAIL = $1 AND USER_PASSWORD = $2', [email, password], (err, res) => {
+    pool.query('SELECT USER_ID, IS_ADMIN FROM LOGIN_VIEW WHERE USER_EMAIL = $1 AND USER_PASSWORD = $2', [email, password], (err, res) => {
         if (err) {
             response.json({ err: err })
             return
@@ -145,7 +145,7 @@ returns:
     array of dictionaries containing all experience names and IDs
 */
 app.get('/get-experiences', (req, response) => {
-    let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION FROM EXPERIENCES`
+    let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION FROM EXPERIENCES ORDER BY EXPERIENCE_PRICE`
     pool.query(query, (err, res) => {
         if (err) {
             response.json({ err: err })
@@ -248,7 +248,7 @@ app.post('/user-book', (req, response) => {
 })
 
 /*
-gets all reviews for an experience
+gets all reviews for an experience that users see (anonymous)
 
 params:
     expID: int
@@ -257,7 +257,7 @@ returns:
 */
 app.get('/get-reviews', (req, response) => {
     let expID = req.query.expID
-    let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1;`
+    let query = `SELECT REVIEW_ID, EXPERIENCE_ID, REVIEW_DATE, REVIEW, RATING FROM REVIEWS WHERE EXPERIENCE_ID = $1 ORDER BY RATING`
     pool.query(query, [expID], (err, res) => {
         if (err) {
             response.json({ err: err })
@@ -267,6 +267,34 @@ app.get('/get-reviews', (req, response) => {
     })
 })
 
+/*
+gets all reviews for an experience that admins see (not anonymous)
+
+params:
+    expID: int
+returns:
+    array of dictionaries containing ratings for specific experience
+*/
+app.get('/admin-get-reviews', (req, response) => {
+    let expID = req.query.expID
+    let query = `SELECT * FROM REVIEWS WHERE EXPERIENCE_ID = $1 ORDER BY RATING`
+    pool.query(query, [expID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            return
+        }
+        response.json({ reviews: res.rows })
+    })
+})
+
+/*
+gets all the therapists
+
+params:
+    none
+returns:
+    array of dictionaries containing therapists
+*/
 app.get('/get-therapists', (req, response) => {
     let query = `SELECT
                     USER_ID AS THERAPIST_ID,
@@ -408,8 +436,7 @@ app.post('/create-experience', (req, response) => {
     let length = req.body.experience_length
     let description = req.body.experience_description
 
-    let query = `INSERT INTO EXPERIENCES(EXPERIENCE_NAME, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION)
-                VALUES($1, $2, $3, $4)`
+    let query = `INSERT INTO EXPERIENCE_VIEW VALUES($1, $2, $3, $4)`
     pool.query(query, [name, price, length, description], (err, res) => {
         if (err) {
             response.json({ err: err })
