@@ -483,7 +483,6 @@ app.post('/delete-experience', (req, response) => {
 
 app.post('/delete-review', (req, response) => {
     let revID = req.body.revID
-    console.log(revID)
     let query = `DELETE FROM REVIEWS WHERE REVIEW_ID = $1`
     pool.query(query, [revID], (err, res) => {
         if (err) {
@@ -497,11 +496,9 @@ app.post('/delete-review', (req, response) => {
 
 app.post('/update-review', (req, response) => {
 
-    console.log(req)
     let reviewID = req.body.reviewID
     let review = req.body.review
     let rating = req.body.rating
-    console.log(reviewID, review, rating)
 
     let query = `UPDATE REVIEWS SET `
     if(review) query += `REVIEW = '${review}',`

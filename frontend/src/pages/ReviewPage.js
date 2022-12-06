@@ -38,12 +38,13 @@ function ReviewPage() {
         };        
         axios
             .post("/write-review", data)
-            .then(res => console.log(res))
+            .then((res) => {
+                updateExperiences(experienceID, experienceName)
+                setRating("")
+                setReview("")
+                console.log(res)
+            })
             .catch(err => console.log(err))
-
-
-        setRating("")
-        setReview("")
     };
 
     const deleteReview = ( target ) => {
@@ -53,12 +54,14 @@ function ReviewPage() {
             revID: target
         };
 
-        console.log(data)
-
         axios
             .post("/delete-review", data)
-            .then(res => console.log(res))
+            .then((res) => {
+                updateExperiences(experienceID, experienceName)
+                console.log(res)
+            })
             .catch(err => console.log(err))
+        
 
         updateExperiences(experienceID, experienceName)
     }
@@ -72,22 +75,22 @@ function ReviewPage() {
             rating: rating
         };
 
-        console.log(data)
-
         axios
             .post("/update-review", data)
-            .then(res => console.log(res))
+            .then((res) => {
+                updateExperiences(experienceID, experienceName)
+                console.log(res)
+            })
             .catch(err => console.log(err))
-
-        updateExperiences(experienceID, experienceName)
 
     }
 
     
     const updateExperiences = ( id, name ) => {
+
         setExperienceID(id)
         setExperienceName(name)
-        console.log(user)
+
         axios
             .get("/get-reviews", {
                 params: {
