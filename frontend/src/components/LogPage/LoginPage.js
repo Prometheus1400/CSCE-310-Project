@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./styles/LoginPage.css"
-import Logo from "./styles/logo.png"
+import Logo from "./styles/logo-white.png"
 import { Grid, TextField, Button, Stack } from "@mui/material"
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
