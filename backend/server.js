@@ -145,7 +145,7 @@ returns:
     array of dictionaries containing all experience names and IDs
 */
 app.get('/get-experiences', (req, response) => {
-    let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION FROM EXPERIENCES ORDER BY PRICE`
+    let query = `SELECT EXPERIENCE_NAME, EXPERIENCE_ID, EXPERIENCE_PRICE, EXPERIENCE_LENGTH, EXPERIENCE_DESCRIPTION FROM EXPERIENCES ORDER BY EXPERIENCE_PRICE`
     pool.query(query, (err, res) => {
         if (err) {
             response.json({ err: err })
