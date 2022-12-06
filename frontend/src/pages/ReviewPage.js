@@ -98,7 +98,6 @@ function ReviewPage() {
                 }
             })
             .then((resp) => {
-                //Do summin
                 setExpReview(resp.data.reviews)
 
             })
