@@ -59,7 +59,7 @@ export default function UserAppointmentList(props) {
             marginRight: "auto",
             padding: "10px",
             height:"450px",
-            color:"rgb(171, 174, 178)",
+            color:"rgb(243, 246, 249)",
             textAlign: "center",
             borderRadius:"10px 10px 10px 10px",
             position:"sticky",

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./styles/LoginPage.css"
-import Logo from "./styles/logo.png"
+import Logo from "./styles/logo-white.png"
 import { Grid, TextField, Button, Stack } from "@mui/material"
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -13,10 +13,13 @@ const StyledTextField = styled(TextField)({
         borderBottomColor: 'rgb(171, 174, 178)',
     },
     '&:hover .MuiInput-underline:before': {
-        borderBottomColor: 'rgb(171, 174, 178)',
+        borderBottomColor: 'white',
     },
     '& label': {
         color: 'rgb(171, 174, 178)',
+    },
+    '&:hover label': {
+        color: 'white',
     },
     '& input': {
         color: 'rgb(171, 174, 178)',
