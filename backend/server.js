@@ -391,10 +391,29 @@ app.post('/update-appointment', (req, response) => {
     let startTime = req.body.startTime
     let comments = req.body.comments
     let apptID = req.body.appointmentID
+    let therapistID = req.body.therapistID
 
-    let query = `UPDATE APPOINTMENTS 
-                SET EXPERIENCE_ID = $1, APPOINTMENT_START_TIME = $2::TIMESTAMP, COMMENTS = $3 WHERE APPOINTMENT_ID = $4`
-    pool.query(query, [expID, startTime, comments, apptID], (err, res) => {
+    let query = `WITH UPDATE_APT AS (
+                    UPDATE APPOINTMENTS SET
+                        EXPERIENCE_ID = $1, 
+                        APPOINTMENT_START_TIME = $2::TIMESTAMP, 
+                        COMMENTS = $3
+                    WHERE APPOINTMENT_ID = $4
+                ), DELETE_THERAPIST AS (
+                    DELETE 
+                    FROM USER_APPOINTMENTS
+                    WHERE APPOINTMENT_ID = $4
+                    AND USER_ID = (
+                        SELECT USERS.USER_ID 
+                        FROM USER_APPOINTMENTS 
+                        JOIN USERS 
+                            ON USER_APPOINTMENTS.USER_ID = USERS.USER_ID
+                        WHERE IS_THERAPIST = TRUE AND APPOINTMENT_ID = $4
+                    )
+                )
+                INSERT INTO USER_APPOINTMENTS(APPOINTMENT_ID, USER_ID)
+                VALUES($4, $5)`
+    pool.query(query, [expID, startTime, comments, apptID, therapistID], (err, res) => {
         if (err) {
             response.json({ err: err })
             console.log(err)
