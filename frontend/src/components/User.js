@@ -12,6 +12,7 @@ export default function User(props) {
     const {updateUserAdmin} = useContext(ProfileFuncContext)
     const { deleteUser } = useContext(ProfileFuncContext)
     const [formData, setFormData] = useState({
+        userID: "",
         userFName: "",
         userLName: "",
         userEmail: "",
@@ -24,6 +25,7 @@ export default function User(props) {
         setOpen(true)
         setEditMode(true)
         setFormData({
+            userID: user_id,
             userFName: user_first_name,
             userLName: user_last_name,
             userEmail: user_email,
@@ -45,6 +47,7 @@ export default function User(props) {
         setOpen(false)
         setEditMode(false)
         setFormData({
+            userID: "",
             userFName: "",
             userLName: "",
             userEmail: "",
@@ -57,7 +60,14 @@ export default function User(props) {
     const handleSubmit = () => {
         console.log("updating user!", formData)
         updateUserAdmin({
-            ...formData,
+            userID: formData.userID,
+            fname: formData.userFName,
+            lname: formData.userLName,
+            email: formData.userEmail,
+            password: formData.userPassword,
+            phone: formData.userPhone,
+            is_admin: formData.isAdmin,
+            is_therapist: formData.isTherapist,
         })
         handleClose()
     }

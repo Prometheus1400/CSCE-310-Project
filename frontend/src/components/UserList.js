@@ -48,7 +48,14 @@ function UserList(props) {
     const handleSubmit = () => {
         console.log("adding user!", formData)
         adminAddUser({
-            ...formData,
+            userID: formData.userID,
+            fname: formData.userFName,
+            lname: formData.userLName,
+            email: formData.userEmail,
+            password: formData.userPassword,
+            phone: formData.userPhone,
+            is_admin: formData.isAdmin,
+            is_therapist: formData.isTherapist,
         })
         handleClose()
     }

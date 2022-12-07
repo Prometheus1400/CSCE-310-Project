@@ -688,17 +688,6 @@ app.post('/delete-experience', (req, response) => {
      let is_admin = req.body.is_admin
      let is_therapist = req.body.is_therapist
 
-    //  if (is_admin == "true") {
-    //     is_admin = true
-    //  } else {
-    //     is_admin = false
-    //  }
-    //  if (is_therapist == "true") {
-    //     is_therapist = true
-    //  } else {
-    //     is_therapist = false
-    //  }
-
      // construct the query with the values given as parameters
      let query = `UPDATE USERS SET `
      if(email) query += `USER_EMAIL = '${email}',`
@@ -706,11 +695,12 @@ app.post('/delete-experience', (req, response) => {
      if(password) query += `USER_PASSWORD = '${password}',`
      if(fname) query += `USER_FIRST_NAME = '${fname}',`
      if(lname) query += `USER_LAST_NAME = '${lname}',`
-     if(is_admin) query += `IS_ADMIN = '${is_admin}',`
-     if(is_therapist) query += `IS_THERAPIST = '${is_therapist}',`
+     if(is_admin) query += `IS_ADMIN = ${is_admin},`
+     if(is_therapist) query += `IS_THERAPIST = ${is_therapist},`
      query = query.slice(0, -1)
      query += ` WHERE USER_ID = $1`
 
+     console.log(query)
      pool.query(query, [userID], (err, res) => {
          if (err) {
              response.json({ err: err })
