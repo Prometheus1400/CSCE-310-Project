@@ -38,7 +38,7 @@ function Navbar() {
                         onClick={() => { navigate("/users", { replace: true }) }}
                         sx={{ my: 2, color: 'white', display: 'block' }}
                     >
-                        Users
+                        My Profile
                     </Button>
 
                     <Button color="inherit" sx={{ marginLeft: 'auto' }} onClick={() => {

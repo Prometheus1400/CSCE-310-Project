@@ -133,7 +133,39 @@ app.post('/createAccount', (req, response) => {
         response.sendStatus(200)
     })
 })
+/*
+creates a user account from admin side (allowed to set admin)
 
+params:
+    email: String
+    password: String
+    phone: String
+    fname: String
+    lname: String
+    isTherapist: bool
+    isAdmin: bool
+returns:
+    status of 200 if successful, else returns error
+
+author: Mitchell
+*/
+app.post('/admin-create-account', (req, response) => {
+    let email = req.body.email
+    let password = req.body.password
+    let phone = req.body.phone
+    let fname = req.body.fname
+    let lname = req.body.lname
+    let isTherapist = req.body.isTherapist
+    let isAdmin = req.body.isAdmin
+    pool.query('INSERT INTO USERS(USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, IS_ADMIN, IS_THERAPIST) VALUES ($1, $2, $3, $4, $5, $6, $7)', [fname, lname, email, phone, password, isAdmin, isTherapist], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
 /*
 gets all appointments with their assigned therapist
 
@@ -353,6 +385,7 @@ app.post('/update-review', (req, response) => {
     let query = `UPDATE REVIEWS SET `
     if (review) query += `REVIEW = '${review}',`
     if (rating) query += `RATING = ${rating},`
+
     query += ` REVIEW_DATE = NOW()::DATE WHERE REVIEW_ID = $1`
 
     pool.query(query, [reviewID], (err, res) => {
@@ -621,3 +654,113 @@ app.post('/delete-experience', (req, response) => {
         response.sendStatus(200)
     })
 })
+
+/*
+ params:
+     userID: int
+ returns:
+     error or status code 200 if successful
+ */
+ app.post('/delete-user', (req, response) => {
+     let userID = req.body.userID
+     let query = `DELETE FROM USERS WHERE USER_ID = $1`
+     pool.query(query, [userID], (err, res) => {
+         if (err) {
+             response.json({ err: err })
+             console.log(err)
+             return
+         }
+         response.sendStatus(200)
+     })
+ })
+
+ /*
+ allows the user to update their own information
+
+ params:
+     userID: int
+     email: String
+     phone: String
+     password: String
+     fname: String
+     lname: String
+ returns:
+     error or status code 200 if successful
+ */
+ app.post('/update-user', (req, response) => {
+     let userID = req.body.userID
+     let email = req.body.email
+     let phone = req.body.phone
+     let password = req.body.password
+     let fname = req.body.fname
+     let lname = req.body.lname
+
+     // construct the query with the values given as parameters
+     let query = `UPDATE USERS SET `
+     if(email) query += `USER_EMAIL = '${email}',`
+     if(phone) query += `USER_PHONE = '${phone}',`
+     if(password) query += `USER_PASSWORD = '${password}',`
+     if(fname) query += `USER_FIRST_NAME = '${fname}',`
+     if(lname) query += `USER_LAST_NAME = '${lname}',`
+     query = query.slice(0, -1)
+     query += ` WHERE USER_ID = $1`
+
+     pool.query(query, [userID], (err, res) => {
+        console.log("here")
+         if (err) {
+             response.json({ err: err })
+             console.log(err)
+             return
+         }
+         response.sendStatus(200)
+     })
+ })
+
+ /*
+ allows the admin to change users data (including their position as therapist or admin)
+
+ params:
+     userID: int
+     email: String
+     phone: String
+     password: String
+     fname: String
+     lname: String
+     is_therapist: bool
+     is_admin: bool
+ returns:
+     error or status code 200 if successful
+ */
+ app.post('/update-user-admin', (req, response) => {
+     let userID = req.body.userID
+     let email = req.body.email
+     let phone = req.body.phone
+     let password = req.body.password
+     let fname = req.body.fname
+     let lname = req.body.lname
+     let is_admin = req.body.is_admin
+     let is_therapist = req.body.is_therapist
+
+     // construct the query with the values given as parameters
+     let query = `UPDATE USERS SET `
+     if(email) query += `USER_EMAIL = '${email}',`
+     if(phone) query += `USER_PHONE = '${phone}',`
+     if(password) query += `USER_PASSWORD = '${password}',`
+     if(fname) query += `USER_FIRST_NAME = '${fname}',`
+     if(lname) query += `USER_LAST_NAME = '${lname}',`
+     if(is_admin) query += `IS_ADMIN = ${is_admin},`
+     if(is_therapist) query += `IS_THERAPIST = ${is_therapist},`
+     query = query.slice(0, -1)
+     query += ` WHERE USER_ID = $1`
+
+     console.log(query)
+     pool.query(query, [userID], (err, res) => {
+         if (err) {
+             response.json({ err: err })
+             console.log(err)
+             return
+         }
+         response.sendStatus(200)
+     })
+ })
+

@@ -6,7 +6,7 @@ import SigninPage from "./components/LogPage/SigninPage"
 import Navbar from "./components/Navbar";
 import AppointmentPage from "./pages/AppointmentPage";
 import ReviewPage from "./pages/ReviewPage";
-import UserPage from "./pages/UserPage";
+import ProfilePage from "./pages/ProfilePage";
 import { UserContext } from "./context/UserContext";
 import usePersistentState from "./hooks/usePersistentState";
 
@@ -31,7 +31,7 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/appointments" element={<AppointmentPage />} />
               <Route path="/reviews" element={<ReviewPage />} />
-              <Route path="/users" element={<UserPage />} />
+              <Route path="/users" element={<ProfilePage />} />
             </Route>
           </Routes>
         </UserContext.Provider>
