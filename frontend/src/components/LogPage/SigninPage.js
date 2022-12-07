@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles/LoginPage.css"
 import Logo from "./styles/logo-white.png"
-import { Grid, TextField, Button, Stack, Checkbox, FormGroup, FormControlLabel } from "@mui/material"
+import { Grid, TextField, Button, Stack } from "@mui/material"
 import { styled } from "@mui/material/styles";
 import { Link } from 'react-router-dom';
 import axios from "axios"
@@ -35,7 +35,6 @@ function SigninPage() {
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isTherapist, setTherapist] = useState([]);
 
     /*
         handles changes to the information text fields
@@ -54,16 +53,11 @@ function SigninPage() {
     };
 
     const handleEmailChange = ({ target }) => {
-        console.log(target);
         setEmail(target.value);
     };
 
     const handlePasswordChange = ({ target }) => {
         setPassword(target.value);
-    };
-
-    const handleTherapist = ({ target }) => {
-        setTherapist(target.checked);
     };
 
     /*
@@ -79,8 +73,9 @@ function SigninPage() {
             phone: phone,
             fname: firstname,
             lname: lastname,
-            isTherapist: isTherapist
         };
+
+        console.log(data)
 
         axios
             .post("/createAccount", data)
@@ -109,11 +104,8 @@ function SigninPage() {
                     <StyledTextField id="standard-basic" label="Firstname" variant="standard" alt="SigninFirstName" onChange={handleFirstnameChange} value={firstname}></StyledTextField>
                     <StyledTextField id="standard-basic" label="Lastname" variant="standard" alt="SigninLastName" onChange={handleLastnameChange} value={lastname}></StyledTextField>
                     <StyledTextField id="standard-basic" label="Email" variant="standard" alt="SigninEmail" onChange={handleEmailChange} value={email}></StyledTextField>
+                    <StyledTextField id="standard-basic" label="Phone Number" variant="standard" alt="SigninPhone" onChange={handlePhoneChange} value={phone}></StyledTextField>
                     <StyledTextField id="standard-basic" label="Password" variant="standard" alt="SigninPassword" onChange={handlePasswordChange} value={password}></StyledTextField>
-                    <FormGroup>
-                        <FormControlLabel control={<Checkbox  sx={{color:"rgb(171, 174, 178)"}}/>} label="Admin" />
-                        <FormControlLabel control={<Checkbox sx={{color:"rgb(171, 174, 178)"}}/>} label="User" />
-                    </FormGroup>
                     <Button variant="contained" onClick={handleClick}>Sign Up</Button>
                     <p>Have an account? 
                         <Link to="/">
