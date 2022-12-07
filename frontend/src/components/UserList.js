@@ -54,8 +54,8 @@ function UserList(props) {
             email: formData.userEmail,
             password: formData.userPassword,
             phone: formData.userPhone,
-            is_admin: formData.isAdmin,
-            is_therapist: formData.isTherapist,
+            isAdmin: formData.isAdmin,
+            isTherapist: formData.isTherapist,
         })
         handleClose()
     }

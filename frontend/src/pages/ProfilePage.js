@@ -98,7 +98,7 @@ function ProfilePage() {
 
     const adminAddUser = (usr) => {
         console.log("adminAddUser()", usr)
-        axios.post("/createAccount", usr)
+        axios.post("/admin-create-account", usr)
             .then(resp => {
                 console.log(resp)
                 getAllUsers()
