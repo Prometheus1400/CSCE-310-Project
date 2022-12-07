@@ -68,9 +68,9 @@ app.get('/get-user', (req, response) => {
             response.json({ err: err })
             return
         }
-        if(res.rows.length > 0)
+        if (res.rows.length > 0)
             response.json({ user: res.rows[0] })
-        else   
+        else
             response.json({ user: undefined })
     })
 })
@@ -383,8 +383,9 @@ app.post('/update-review', (req, response) => {
     let rating = req.body.rating
 
     let query = `UPDATE REVIEWS SET `
-    if(review) query += `REVIEW = '${review}',`
-    if(rating) query += `RATING = ${rating},`
+    if (review) query += `REVIEW = '${review}',`
+    if (rating) query += `RATING = ${rating},`
+
     query += ` REVIEW_DATE = NOW()::DATE WHERE REVIEW_ID = $1`
 
     pool.query(query, [reviewID], (err, res) => {
@@ -449,6 +450,26 @@ app.post('/user-unbook', (req, response) => {
     })
 })
 
+/*
+deletes the entered profile
+
+params:
+    userID: int
+returns:
+    error or status code 200 if successful
+*/
+app.post('/delete-user', (req, response) => {
+    let userID = req.body.userID
+    let query = `DELETE FROM USERS WHERE USER_ID = $1`
+    pool.query(query, [userID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
 /*
 creates an appointment
 

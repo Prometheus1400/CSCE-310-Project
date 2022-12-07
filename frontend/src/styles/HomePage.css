@@ -12,3 +12,15 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.ratingBox{
+    background-color: rgb(186, 186, 186);
+}
+
+.textHeaders{
+    color:rgb(197, 197, 197);
+}
+
+.ReviewBox{
+    color:rgb(197, 197, 197);
+}
