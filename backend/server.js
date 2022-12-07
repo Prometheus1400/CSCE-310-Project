@@ -362,6 +362,25 @@ app.post('/user-unbook', (req, response) => {
 })
 
 /*
+deletes the entered profile
+
+params:
+    userID: int
+returns:
+    error or status code 200 if successful
+*/
+app.post('/delete-user', (req, response) => {
+    let userID = req.body.userID
+    let query = `DELETE FROM USERS WHERE USER_ID = $1`
+    pool.query(query, [userID], (err, res) => {
+      if (err) {
+                  response.json({ err: err })
+                  console.log(err)
+                  return
+              }
+              response.sendStatus(200)
+          })
+/*
 creates an appointment
 
 params:
@@ -545,4 +564,3 @@ app.post('/delete-experience', (req, response) => {
         response.sendStatus(200)
     })
 })
-
