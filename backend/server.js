@@ -546,3 +546,110 @@ app.post('/delete-experience', (req, response) => {
     })
 })
 
+/*
+ params:
+     userID: int
+ returns:
+     error or status code 200 if successful
+ */
+ app.post('/delete-user', (req, response) => {
+     let userID = req.body.userID
+     let query = `DELETE FROM USERS WHERE USER_ID = $1`
+     pool.query(query, [userID], (err, res) => {
+         if (err) {
+             response.json({ err: err })
+             console.log(err)
+             return
+         }
+         response.sendStatus(200)
+     })
+ })
+
+ /*
+ allows the user to update their own information
+
+ params:
+     userID: int
+     email: String
+     phone: String
+     password: String
+     fname: String
+     lname: String
+ returns:
+     error or status code 200 if successful
+ */
+ app.post('/update-user', (req, response) => {
+     let userID = req.body.userID
+     let email = req.body.email
+     let phone = req.body.phone
+     let password = req.body.password
+     let fname = req.body.fname
+     let lname = req.body.lname
+
+     // construct the query with the values given as parameters
+     let query = `UPDATE USERS SET `
+     if(email) query += `USER_EMAIL = '${email}',`
+     if(phone) query += `USER_PHONE = '${phone}',`
+     if(password) query += `USER_PASSWORD = '${password}',`
+     if(fname) query += `USER_FIRST_NAME = '${fname}',`
+     if(lname) query += `USER_LAST_NAME = '${lname}',`
+     query = query.slice(0, -1)
+     query += ` WHERE USER_ID = $1`
+
+     pool.query(query, [userID], (err, res) => {
+         if (err) {
+            console.log(query)
+             response.json({ err: err })
+             console.log(err)
+             return
+         }
+         response.sendStatus(200)
+     })
+ })
+
+ /*
+ allows the admin to change users data (including their position as therapist or admin)
+
+ params:
+     userID: int
+     email: String
+     phone: String
+     password: String
+     fname: String
+     lname: String
+     is_therapist: bool
+     is_admin: bool
+ returns:
+     error or status code 200 if successful
+ */
+ app.post('/update-user-admin', (req, response) => {
+     let userID = req.body.userID
+     let email = req.body.email
+     let phone = req.body.phone
+     let password = req.body.password
+     let fname = req.body.fname
+     let lname = req.body.lname
+     let is_admin = req.body.is_admin
+     let is_therapist = req.body.is_therapist
+
+     // construct the query with the values given as parameters
+     let query = `UPDATE USERS SET `
+     if(email) query += `USER_EMAIL = '${email}',`
+     if(phone) query += `USER_PHONE = '${phone}',`
+     if(password) query += `USER_PASSWORD = '${password}',`
+     if(fname) query += `USER_FIRST_NAME = '${fname}',`
+     if(lname) query += `USER_LAST_NAME = '${lname}',`
+     if(is_admin) query += `IS_ADMIN = '${is_admin}',`
+     if(is_therapist) query += `IS_THERAPIST = '${is_therapist}',`
+     query = query.slice(0, -1)
+     query += ` WHERE USER_ID = $1`
+
+     pool.query(query, [userID], (err, res) => {
+         if (err) {
+             response.json({ err: err })
+             console.log(err)
+             return
+         }
+         response.sendStatus(200)
+     })
+ })
