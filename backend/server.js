@@ -603,37 +603,3 @@ app.post('/delete-experience', (req, response) => {
     })
 })
 
-
-app.post('/delete-review', (req, response) => {
-    let revID = req.body.revID
-    let query = `DELETE FROM REVIEWS WHERE REVIEW_ID = $1`
-    pool.query(query, [revID], (err, res) => {
-        if (err) {
-            response.json({ err: err })
-            console.log(err)
-            return
-        }
-        response.sendStatus(200)
-    })
-})
-
-app.post('/update-review', (req, response) => {
-
-    let reviewID = req.body.reviewID
-    let review = req.body.review
-    let rating = req.body.rating
-
-    let query = `UPDATE REVIEWS SET `
-    if(review) query += `REVIEW = '${review}',`
-    if(rating) query += `RATING = ${rating},`
-    query += ` REVIEW_DATE = NOW()::DATE WHERE REVIEW_ID = $1`
-
-    pool.query(query, [reviewID], (err, res) => {
-        if (err) {
-            response.json({ err: err })
-            console.log(err)
-            return
-        }
-        response.sendStatus(200)
-    })
-})
