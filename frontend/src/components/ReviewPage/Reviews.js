@@ -5,6 +5,13 @@ import { useContext } from "react"
 import { UserContext } from "../../context/UserContext"
 import Rating from "./Rating"
 
+/*
+    Returns all the reviews of a certain experience in textboxes
+    Gives the option of editing or deleting the review if:
+        User: User writes that review
+        Admin: All reviews can be edited or deleted
+*/
+
 export default function Reviews(props){
 
     const { expReview } = props
@@ -14,6 +21,7 @@ export default function Reviews(props){
 
     
     const expReviews = expReview?.map((rev) => {
+        console.log(rev)
         return (
             <>
             <Container className="ReviewBox" maxWidth="lg" sx={{

@@ -19,6 +19,10 @@ function ReviewPage() {
     const { user } = useContext(UserContext)
 
 
+    /*
+        handles changes to the rating and review text fields
+    */
+
     const handleReviewChange = ({ target }) => {
         console.log(exps)
         setReview(target.value);
@@ -27,6 +31,11 @@ function ReviewPage() {
     const handleRatingChange = ({ target }) => {
         setRating(target.value);
     };
+
+    /*
+        function that executes after 'Post Review' button is hit
+        will create a new entry in the review table for the specified experience 
+    */
 
     const postReview = () => {
 
@@ -47,6 +56,11 @@ function ReviewPage() {
             .catch(err => console.log(err))
     };
 
+    /*
+        function that executes after trash icon is hit
+        will delete a certain review given the review_id 
+    */
+
     const deleteReview = ( target ) => {
         console.log("Deleting Review")
 
@@ -65,6 +79,12 @@ function ReviewPage() {
 
         updateExperiences(experienceID, experienceName)
     }
+
+    /*
+        function that executes after pencil icon is hit
+        will update an existing entry in the Review table based on the values
+        in the Review and Rating text fields
+    */
 
     const updateReview = ( target ) => {
         console.log("REVIEW_ID", target)
@@ -85,7 +105,11 @@ function ReviewPage() {
 
     }
 
-    
+    /*
+        function that executes after any Experience Button is hit
+        will populate the page with the reviews for a corresponding experience
+    */
+
     const updateExperiences = ( id, name ) => {
 
         setExperienceID(id)
@@ -103,6 +127,10 @@ function ReviewPage() {
             })
             .catch(err => console.log(err));
     };
+
+    /*
+        function that executes on load and gets all the experiences
+    */
     
     const getExperiences = () =>{
         axios
@@ -146,7 +174,8 @@ function ReviewPage() {
                             fullWidth
                             multiline
                             onChange={handleRatingChange}
-                            value={rating} /><Button variant="contained" onClick={postReview}>Post Review</Button></>
+                            value={rating} />
+                    <Button variant="contained" onClick={postReview}>Post Review</Button></>
                 }
                 {user.isAdmin &&
                     <>

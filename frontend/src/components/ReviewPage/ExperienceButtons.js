@@ -1,5 +1,9 @@
 import { Button } from '@mui/material';
 
+/*
+    Creates a seperate Button for each experience that when clicked
+    will load the reviews that correspond to the experience clicked
+*/
 
 export default function ExperienceButtons(props){
 

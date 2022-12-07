@@ -6,6 +6,10 @@ import { styled } from "@mui/material/styles";
 import { Link } from 'react-router-dom';
 import axios from "axios"
 
+/*
+    Stylize the text fields
+*/
+
 const StyledTextField = styled(TextField)({
     '& .MuiInput-underline:before': {
         borderBottomColor: 'rgb(171, 174, 178)',
@@ -33,6 +37,10 @@ function SigninPage() {
     const [password, setPassword] = useState("");
     const [isTherapist, setTherapist] = useState([]);
 
+    /*
+        handles changes to the information text fields
+    */
+
     const handleFirstnameChange = ({ target }) => {
         setFirstname(target.value);
     };
@@ -57,6 +65,11 @@ function SigninPage() {
     const handleTherapist = ({ target }) => {
         setTherapist(target.checked);
     };
+
+    /*
+        executes after 'Sign Up' button is hit
+        and creates new entry in database for this user
+    */
 
     const handleClick = () => {
 
