@@ -653,8 +653,8 @@ app.post('/delete-experience', (req, response) => {
      query += ` WHERE USER_ID = $1`
 
      pool.query(query, [userID], (err, res) => {
+        console.log("here")
          if (err) {
-            console.log(query)
              response.json({ err: err })
              console.log(err)
              return

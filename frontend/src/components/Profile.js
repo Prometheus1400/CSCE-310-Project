@@ -12,6 +12,7 @@ export default function Profile(props) {
     const [open, setOpen] = useState(false)
     const [editMode, setEditMode] = useState(false)
     const [formData, setFormData] = useState({
+        userID: "",
         userFName: "",
         userLName: "",
         userEmail: "",
@@ -27,17 +28,17 @@ export default function Profile(props) {
             })
         })
     }
-    console.log(userInfo)
     const handleClickOpen = () => {
+        setOpen(true)
+        setEditMode(true)
         setFormData({
+            userID: userInfo.userProfile.user_id,
             userFName: userInfo.userProfile.user_first_name,
             userLName: userInfo.userProfile.user_last_name,
             userEmail: userInfo.userProfile.user_email, // in hours
             userPassword: userInfo.userProfile.user_password,
             userPhone: userInfo.userProfile.user_phone,
         })
-        setOpen(true)
-        setEditMode(true)
     };
     const handleClose = () => {
         setOpen(false)
@@ -46,6 +47,7 @@ export default function Profile(props) {
 
     const handleSubmit = () => {
         if (editMode) {
+            console.log("data being submitted: ", formData)
             updateUser({
                 ...formData,
             })

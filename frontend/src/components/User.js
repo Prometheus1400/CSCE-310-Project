@@ -2,20 +2,28 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ProfileFuncContext } from '../context/ProfileFuncContext';
 import { UserContext } from "../context/UserContext"
-import {Grid, Button} from "@mui/material"
-import { useContext} from "react"
+import { Grid, Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, FormControl, Checkbox, FormGroup, FormControlLabel } from "@mui/material"
+import React, { useContext, useState, useEffect } from "react"
 
 export default function User(props) {
     const { user_id, user_first_name, user_last_name, user_email, user_phone, user_password, is_admin, is_therapist } = props.item
-    const { setFormData, setOpen, setEditMode } = props
+    const [open, setOpen] = useState(false)
+    const [editMode, setEditMode] = useState(false)
+    const {updateUserAdmin} = useContext(ProfileFuncContext)
     const { deleteUser } = useContext(ProfileFuncContext)
-    // const { user } = useContext(UserContext)
-
+    const [formData, setFormData] = useState({
+        userFName: "",
+        userLName: "",
+        userEmail: "",
+        userPassword: "",
+        userPhone: "",
+        isAdmin: 'f',
+        isTherapist: 'f',
+    })
     const handleClickOpen = () => {
         setOpen(true)
         setEditMode(true)
         setFormData({
-            // userID: user_id,
             userFName: user_first_name,
             userLName: user_last_name,
             userEmail: user_email,
@@ -24,6 +32,34 @@ export default function User(props) {
             isAdmin: is_admin,
             isTherapist: is_therapist,
         })
+    }
+     const handleFormChange = (event) => {
+        setFormData((prev) => {
+            return ({
+                ...prev,
+                [event.target.name]: event.target.value
+            })
+        })
+    }
+    const handleClose = () => {
+        setOpen(false)
+        setEditMode(false)
+        setFormData({
+            userFName: "",
+            userLName: "",
+            userEmail: "",
+            userPassword: "",
+            userPhone: "",
+            isAdmin: 'f',
+            isTherapist: 'f',
+        })
+    };
+    const handleSubmit = () => {
+        console.log("updating user!", formData)
+        updateUserAdmin({
+            ...formData,
+        })
+        handleClose()
     }
     if (props === undefined){
         return(
@@ -70,6 +106,103 @@ export default function User(props) {
                         </div>
                     </Grid>
                 </Grid>
+                <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>EDIT USER</DialogTitle>
+                <DialogContent>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="userFName"
+                            name="userFName"
+                            label="First Name"
+                            type="text"
+                            value={formData.userFName}
+                            onChange={handleFormChange}
+                        />
+                    </FormControl>
+                    <br></br>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="userLName"
+                            name="userLName"
+                            label="Last Name"
+                            type="text"
+                            value={formData.userLName}
+                            onChange={handleFormChange}
+                        />
+                    </FormControl>
+                    <br></br>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="userEmail"
+                            name="userEmail"
+                            label="Email"
+                            type="text"
+                            value={formData.userEmail}
+                            onChange={handleFormChange}
+                        />
+                    </FormControl>
+                    <br></br>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="userPhone"
+                            name="userPhone"
+                            label="Phone"
+                            type="text"
+                            value={formData.userPhone}
+                            onChange={handleFormChange}
+                        />
+                    </FormControl>
+                    <br></br>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="userPassword"
+                            name="userPassword"
+                            label="Password"
+                            type="text"
+                            value={formData.userPassword}
+                            onChange={handleFormChange}
+                        />
+                    </FormControl>
+                    <FormGroup>
+                         <FormControlLabel
+                            control={
+                            <Checkbox
+                                checked={formData.is_therapist}
+                                value={formData.is_therapist}
+                                onChange={handleFormChange}
+                                color="primary"
+                            />
+                            }
+                            label="Therapist"
+                        />
+                        <FormControlLabel
+                            control={
+                            <Checkbox
+                                checked={formData.is_admin}
+                                value={formData.is_admin}
+                                onChange={handleFormChange}
+                                color="primary"
+                            />
+                            }
+                            label="Admin"
+                        />
+                     </FormGroup>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleSubmit}>Save</Button>
+                </DialogActions>
+            </Dialog>
             </div>
         )
     }

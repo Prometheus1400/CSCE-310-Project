@@ -1,15 +1,13 @@
 import User from "./User"
-import { useContext, useState, useEffect } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { UserContext } from "../context/UserContext"
-import AddIcon from '@mui/icons-material/Add';
-import { Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, Select, MenuItem, FormControl } from "@mui/material"
-import axios from "axios";
+import { Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, FormControl, Checkbox, FormGroup, FormControlLabel } from "@mui/material"
 import { ProfileFuncContext } from "../context/ProfileFuncContext";
 
 function UserList(props) {
     const {users} = props
     const { user } = useContext(UserContext)
-    const {updateUserAdmin,adminAddUser} = useContext(ProfileFuncContext)
+    const {adminAddUser} = useContext(ProfileFuncContext)
     const [open, setOpen] = useState(false)
     const [editMode, setEditMode] = useState(false)
     const [formData, setFormData] = useState({
@@ -21,7 +19,6 @@ function UserList(props) {
         isAdmin: 'f',
         isTherapist: 'f',
     })
-
     console.log("props,", props)
     const handleFormChange = (event) => {
         setFormData((prev) => {
@@ -38,19 +35,21 @@ function UserList(props) {
     const handleClose = () => {
         setOpen(false)
         setEditMode(false)
+        setFormData({
+            userFName: "",
+            userLName: "",
+            userEmail: "",
+            userPassword: "",
+            userPhone: "",
+            isAdmin: 'f',
+            isTherapist: 'f',
+        })
     };
-
     const handleSubmit = () => {
-        if (!editMode) {
-            console.log("adding user!", formData)
-            adminAddUser({
-                ...formData,
-            })
-        } else {
-            updateUserAdmin({
-                ...formData,
-            })
-        }
+        console.log("adding user!", formData)
+        adminAddUser({
+            ...formData,
+        })
         handleClose()
     }
     let count = 0
@@ -106,7 +105,7 @@ function UserList(props) {
             </h3>
             {/* <Button onClick={handleClickOpen}>Update Profile</Button></div> */}
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>EDIT USER</DialogTitle>
+                <DialogTitle>ADD USER</DialogTitle>
                 <DialogContent>
                     <FormControl sx={{ m: 1, minWidth: 120 }}>
                         <TextField
@@ -172,6 +171,30 @@ function UserList(props) {
                             onChange={handleFormChange}
                         />
                     </FormControl>
+                    <FormGroup>
+                         <FormControlLabel
+                            control={
+                            <Checkbox
+                                checked={formData.is_therapist}
+                                value={formData.is_therapist}
+                                onChange={handleFormChange}
+                                color="primary"
+                            />
+                            }
+                            label="Therapist"
+                        />
+                        <FormControlLabel
+                            control={
+                            <Checkbox
+                                checked={formData.is_admin}
+                                value={formData.is_admin}
+                                onChange={handleFormChange}
+                                color="primary"
+                            />
+                            }
+                            label="Admin"
+                        />
+                     </FormGroup>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
