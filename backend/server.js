@@ -124,8 +124,7 @@ app.post('/createAccount', (req, response) => {
     let phone = req.body.phone
     let fname = req.body.fname
     let lname = req.body.lname
-    let isTherapist = req.body.isTherapist
-    pool.query('INSERT INTO USERS(USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, IS_ADMIN, IS_THERAPIST) VALUES ($1, $2, $3, $4, $5, false, $6)', [fname, lname, email, phone, password, isTherapist], (err, res) => {
+    pool.query('INSERT INTO USERS(USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, IS_ADMIN, IS_THERAPIST) VALUES ($1, $2, $3, $4, $5, false, false)', [fname, lname, email, phone, password], (err, res) => {
         if (err) {
             response.json({ err: err })
             console.log(err)
