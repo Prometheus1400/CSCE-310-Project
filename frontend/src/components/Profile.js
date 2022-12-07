@@ -49,7 +49,12 @@ export default function Profile(props) {
         if (editMode) {
             console.log("data being submitted: ", formData)
             updateUser({
-                ...formData,
+                userID: formData.userID,
+                fname: formData.userFName,
+                lname: formData.userLName,
+                email: formData.userEmail,
+                password: formData.userPassword,
+                phone: formData.userPhone,
             })
         }
         handleClose()
