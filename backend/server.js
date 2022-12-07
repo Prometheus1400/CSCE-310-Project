@@ -124,8 +124,7 @@ app.post('/createAccount', (req, response) => {
     let phone = req.body.phone
     let fname = req.body.fname
     let lname = req.body.lname
-    let isTherapist = req.body.isTherapist
-    pool.query('INSERT INTO USERS(USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, IS_ADMIN, IS_THERAPIST) VALUES ($1, $2, $3, $4, $5, false, $6)', [fname, lname, email, phone, password, isTherapist], (err, res) => {
+    pool.query('INSERT INTO USERS(USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL, USER_PHONE, USER_PASSWORD, IS_ADMIN, IS_THERAPIST) VALUES ($1, $2, $3, $4, $5, false, false)', [fname, lname, email, phone, password], (err, res) => {
         if (err) {
             response.json({ err: err })
             console.log(err)
@@ -299,13 +298,70 @@ author: Alisa
 */
 app.get('/get-reviews', (req, response) => {
     let expID = req.query.expID
-    let query = `SELECT REVIEW_ID, EXPERIENCE_ID, REVIEW_DATE, REVIEW, RATING FROM REVIEWS WHERE EXPERIENCE_ID = $1 ORDER BY RATING`
+    let query = `SELECT REVIEW_ID, USER_ID, EXPERIENCE_ID, REVIEW_DATE, REVIEW, RATING FROM REVIEWS WHERE EXPERIENCE_ID = $1 ORDER BY RATING`
     pool.query(query, [expID], (err, res) => {
         if (err) {
             response.json({ err: err })
             return
         }
         response.json({ reviews: res.rows })
+    })
+})
+
+
+/*
+deletes a review based on the ID of the review
+
+params:
+    revID: int
+returns:
+    error or status code 200 if successful
+
+author: Sami
+*/
+app.post('/delete-review', (req, response) => {
+    let revID = req.body.revID
+    let query = `DELETE FROM REVIEWS WHERE REVIEW_ID = $1`
+    pool.query(query, [revID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
+    })
+})
+
+/*
+updates a review based on the ID of the review, the new rating, and new review
+
+params:
+    reviewID: int
+    rating: int
+    review: string
+returns:
+    error or status code 200 if successful
+
+author: Sami
+*/
+app.post('/update-review', (req, response) => {
+
+    let reviewID = req.body.reviewID
+    let review = req.body.review
+    let rating = req.body.rating
+
+    let query = `UPDATE REVIEWS SET `
+    if(review) query += `REVIEW = '${review}',`
+    if(rating) query += `RATING = ${rating},`
+    query += ` REVIEW_DATE = NOW()::DATE WHERE REVIEW_ID = $1`
+
+    pool.query(query, [reviewID], (err, res) => {
+        if (err) {
+            response.json({ err: err })
+            console.log(err)
+            return
+        }
+        response.sendStatus(200)
     })
 })
 

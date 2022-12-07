@@ -8,6 +8,10 @@ import { useContext } from "react";
 import { UserContext } from "../../context/UserContext"
 import { styled } from "@mui/material/styles";
 
+/*
+    Stylize the text fields
+*/
+
 const StyledTextField = styled(TextField)({
     '& .MuiInput-underline:before': {
         borderBottomColor: 'rgb(171, 174, 178)',
@@ -32,8 +36,11 @@ function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = React.useState("");
-
     const { setUser } = useContext(UserContext)
+
+    /*
+        handles changes to Username and Password text fields
+    */
 
     const handleUsernameChange = ({ target }) => {
         setUsername(target.value);
@@ -42,6 +49,13 @@ function LoginPage() {
     const handlePasswordChange = ({ target }) => {
         setPassword(target.value);
     };
+
+    /*
+        executes after 'Log In' button is hit
+        checks to see if the user is in the database
+        if so, we will store userID and isAdmin
+        and navigate to the home page
+    */
 
     const handleClick = () => {
         axios.get('/login', {
