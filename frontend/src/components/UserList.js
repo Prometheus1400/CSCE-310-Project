@@ -1,7 +1,7 @@
 import User from "./User"
 import React, { useContext, useState, useEffect } from "react"
 import { UserContext } from "../context/UserContext"
-import { Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, FormControl, Checkbox, FormGroup, FormControlLabel } from "@mui/material"
+import { Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, FormControl, Checkbox, FormGroup, FormControlLabel, Select, MenuItem } from "@mui/material"
 import { ProfileFuncContext } from "../context/ProfileFuncContext";
 
 function UserList(props) {
@@ -16,8 +16,8 @@ function UserList(props) {
         userEmail: "",
         userPassword: "",
         userPhone: "",
-        isAdmin: 'f',
-        isTherapist: 'f',
+        isAdmin: false,
+        isTherapist: false,
     })
     console.log("props,", props)
     const handleFormChange = (event) => {
@@ -41,8 +41,8 @@ function UserList(props) {
             userEmail: "",
             userPassword: "",
             userPhone: "",
-            isAdmin: 'f',
-            isTherapist: 'f',
+            isAdmin: "",
+            isTherapist: "",
         })
     };
     const handleSubmit = () => {
@@ -171,32 +171,46 @@ function UserList(props) {
                             onChange={handleFormChange}
                         />
                     </FormControl>
-                    <FormGroup>
-                         <FormControlLabel
-                            control={
-                            <Checkbox
-                                checked={formData.is_therapist}
-                                value={formData.is_therapist}
-                                onChange={handleFormChange}
-                                color="primary"
-                            />
-                            }
-                            label="Therapist"
-                        />
-                        <FormControlLabel
-                            control={
-                            <Checkbox
-                                checked={formData.is_admin}
-                                value={formData.is_admin}
-                                onChange={handleFormChange}
-                                color="primary"
-                            />
-                            }
+                <br></br>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="isAdmin">Is Admin?</InputLabel>
+                        <Select
+                            id="isAdmin"
+                            name="isAdmin"
+                            value={formData.isAdmin}
                             label="Admin"
-                        />
-                     </FormGroup>
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 200 }}
+                        >
+                            <MenuItem value="true">
+                                <em>Yes</em>
+                            </MenuItem>
+                            <MenuItem value="false">
+                                <em>No</em>
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
+                <br></br>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="isTherapist">Is Therapist?</InputLabel>
+                        <Select
+                            id="isTherapist"
+                            name="isTherapist"
+                            value={formData.isTherapist}
+                            label="Therapist"
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 200 }}
+                        >
+                            <MenuItem value="true">
+                                <em>Yes</em>
+                            </MenuItem>
+                            <MenuItem value="false">
+                                <em>No</em>
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
                 </DialogContent>
-                <DialogActions>
+                   <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleSubmit}>Save</Button>
                 </DialogActions>

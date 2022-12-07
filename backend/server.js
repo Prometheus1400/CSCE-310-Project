@@ -688,6 +688,17 @@ app.post('/delete-experience', (req, response) => {
      let is_admin = req.body.is_admin
      let is_therapist = req.body.is_therapist
 
+    //  if (is_admin == "true") {
+    //     is_admin = true
+    //  } else {
+    //     is_admin = false
+    //  }
+    //  if (is_therapist == "true") {
+    //     is_therapist = true
+    //  } else {
+    //     is_therapist = false
+    //  }
+
      // construct the query with the values given as parameters
      let query = `UPDATE USERS SET `
      if(email) query += `USER_EMAIL = '${email}',`

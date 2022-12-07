@@ -2,7 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ProfileFuncContext } from '../context/ProfileFuncContext';
 import { UserContext } from "../context/UserContext"
-import { Grid, Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, FormControl, Checkbox, FormGroup, FormControlLabel } from "@mui/material"
+import { Grid, Button, TextField, Dialog, DialogActions, DialogContent, InputLabel, DialogTitle, FormControl, Checkbox, FormGroup, FormControlLabel, Select, MenuItem } from "@mui/material"
 import React, { useContext, useState, useEffect } from "react"
 
 export default function User(props) {
@@ -17,8 +17,8 @@ export default function User(props) {
         userEmail: "",
         userPassword: "",
         userPhone: "",
-        isAdmin: 'f',
-        isTherapist: 'f',
+        isAdmin: false,
+        isTherapist: false,
     })
     const handleClickOpen = () => {
         setOpen(true)
@@ -50,8 +50,8 @@ export default function User(props) {
             userEmail: "",
             userPassword: "",
             userPhone: "",
-            isAdmin: 'f',
-            isTherapist: 'f',
+            isAdmin: "",
+            isTherapist: "",
         })
     };
     const handleSubmit = () => {
@@ -173,30 +173,44 @@ export default function User(props) {
                             onChange={handleFormChange}
                         />
                     </FormControl>
-                    <FormGroup>
-                         <FormControlLabel
-                            control={
-                            <Checkbox
-                                checked={formData.is_therapist}
-                                value={formData.is_therapist}
-                                onChange={handleFormChange}
-                                color="primary"
-                            />
-                            }
-                            label="Therapist"
-                        />
-                        <FormControlLabel
-                            control={
-                            <Checkbox
-                                checked={formData.is_admin}
-                                value={formData.is_admin}
-                                onChange={handleFormChange}
-                                color="primary"
-                            />
-                            }
+                   <br></br>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="isAdmin">Is Admin?</InputLabel>
+                        <Select
+                            id="isAdmin"
+                            name="isAdmin"
+                            value={formData.isAdmin}
                             label="Admin"
-                        />
-                     </FormGroup>
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 200 }}
+                        >
+                            <MenuItem value="true">
+                                <em>Yes</em>
+                            </MenuItem>
+                            <MenuItem value="false">
+                                <em>No</em>
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
+                   <br></br>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="isTherapist">Is Therapist?</InputLabel>
+                        <Select
+                            id="isTherapist"
+                            name="isTherapist"
+                            value={formData.isTherapist}
+                            label="Therapist"
+                            onChange={handleFormChange}
+                            sx={{ minWidth: 200 }}
+                        >
+                            <MenuItem value="true">
+                                <em>Yes</em>
+                            </MenuItem>
+                            <MenuItem value="false">
+                                <em>No</em>
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
