@@ -69,7 +69,7 @@ function UserList(props) {
     if (users == undefined){
         return(
             <div className="UserList" style={{
-            height: "450px",
+            height: "600px",
             backgroundColor: "rgb(26, 32, 39)",
             padding: "10px",
             width: "500px",
@@ -88,7 +88,7 @@ function UserList(props) {
     } else {
     return (
         <div className="UserList" style={{
-            height: "450px",
+            height: "600px",
             backgroundColor: "rgb(26, 32, 39)",
             padding: "10px",
             width: "500px",

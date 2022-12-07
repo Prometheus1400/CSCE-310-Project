@@ -119,9 +119,9 @@ function ProfilePage() {
     return (
        <div className="ProfilePage" style={{
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
         }}>
+    {/* // <div> */}
             <ProfileFuncContext.Provider value={functions}>
                 <Profile userProfile = {userProfile}></Profile>
                 {user.isAdmin && <UserList users = {users}></UserList>
