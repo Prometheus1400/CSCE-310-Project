@@ -54,7 +54,7 @@ function UserList(props) {
         handleClose()
     }
     let count = 0
-    const usrComponents = users.map((a) => {
+    const usrComponents = users?.map((a) => {
         count++
         return (
             <User
@@ -67,6 +67,26 @@ function UserList(props) {
         )
     })
 
+    if (users == undefined){
+        return(
+            <div className="UserList" style={{
+            height: "450px",
+            backgroundColor: "rgb(26, 32, 39)",
+            padding: "10px",
+            width: "500px",
+            margin: "10px",
+            color: "rgb(243, 246, 249)",
+            textAlign: "center",
+            borderRadius: "10px 10px 10px 10px",
+            position: user.isAdmin ? "static" : "absolute",
+            left: "0px",
+        }}>
+            <h3>All Users &zwnj; &zwnj;  
+                <Button onClick={handleClickOpen} variant="contained" size="small"> Add User </Button>
+            </h3>
+            </div>
+        )
+    } else {
     return (
         <div className="UserList" style={{
             height: "450px",
@@ -163,6 +183,7 @@ function UserList(props) {
             </div>
         </div>
     )
+    }
 }
 
 export default UserList

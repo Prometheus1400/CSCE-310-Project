@@ -39,7 +39,7 @@ function ProfilePage() {
             console.log(resp.data.rows)
             setUsers(resp.data.rows)
         }).catch((err) => {
-            console.log(err)
+            console.log("ERROR: ", err)
         })
     }
 

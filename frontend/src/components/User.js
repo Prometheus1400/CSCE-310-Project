@@ -9,7 +9,7 @@ export default function User(props) {
     const { user_id, user_first_name, user_last_name, user_email, user_phone, user_password, is_admin, is_therapist } = props.item
     const { setFormData, setOpen, setEditMode } = props
     const { deleteUser } = useContext(ProfileFuncContext)
-    const { user } = useContext(UserContext)
+    // const { user } = useContext(UserContext)
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -25,6 +25,14 @@ export default function User(props) {
             isTherapist: is_therapist,
         })
     }
+    if (props === undefined){
+        return(
+            <div className = "Button">
+                <h1 className="textHeaders"> Loading User Data... </h1>
+            </div>
+        )
+    }
+    else{
         return (
             <div className="User" style={{
                 minWidth: "350px",
@@ -64,4 +72,5 @@ export default function User(props) {
                 </Grid>
             </div>
         )
+    }
 }

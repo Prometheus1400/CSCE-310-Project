@@ -27,13 +27,14 @@ export default function Profile(props) {
             })
         })
     }
+    console.log(userInfo)
     const handleClickOpen = () => {
         setFormData({
-            userFName: props.userProfile.user_first_name,
-            userLName: props.userProfile.user_last_name,
-            userEmail: props.userProfile.user_email, // in hours
-            userPassword: props.userProfile.user_password,
-            userPhone: props.userProfile.user_phone,
+            userFName: userInfo.userProfile.user_first_name,
+            userLName: userInfo.userProfile.user_last_name,
+            userEmail: userInfo.userProfile.user_email, // in hours
+            userPassword: userInfo.userProfile.user_password,
+            userPhone: userInfo.userProfile.user_phone,
         })
         setOpen(true)
         setEditMode(true)
@@ -51,6 +52,21 @@ export default function Profile(props) {
         }
         handleClose()
     }
+    if (props == undefined) {
+        <div className="Profile" style={{
+            height: "450px",
+            backgroundColor: "rgb(26, 32, 39)",
+            padding: "10px",
+            width: "500px",
+            margin: "10px",
+            color: "rgb(243, 246, 249)",
+            textAlign: "center",
+            borderRadius: "10px 10px 10px 10px",
+            position: user.isAdmin ? "static" : "absolute",
+            left: "0px",
+
+        }}><h3>Loading Profile Data</h3></div>
+    } else {
     return (
         <div className="Profile" style={{
             height: "450px",
@@ -146,5 +162,6 @@ export default function Profile(props) {
                 </DialogActions>
             </Dialog>
         </div >
-    ) 
+    )
+    } 
 }
