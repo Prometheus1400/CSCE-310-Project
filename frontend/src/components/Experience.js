@@ -3,12 +3,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useContext, useState } from "react";
 import { AptFuncContext } from "../context/AptFuncContext";
+import { UserContext } from "../context/UserContext"
+
 
 export default function Experience(props) {
     const { experience_id, experience_name, experience_price, experience_length, experience_description } = props.item
     const { setOpen, setFormData, setEditMode } = props
     const { handleAdminDeleteExp } = useContext(AptFuncContext)
     const [descOpen, setDescOpen] = useState(false)
+
+    const { user } = useContext(UserContext)
 
     const handleClickEdit = () => {
         console.log("handleClickEdit()")
@@ -48,6 +52,7 @@ export default function Experience(props) {
                 <Grid item xs={3} sx={{ mr: 1 }}>
                     ${experience_price}
                 </Grid>
+                {user.isAdmin && 
                 <Grid item xs={1}>
                     <div style={{ display: "flex" }}>
                         <Button
@@ -65,7 +70,7 @@ export default function Experience(props) {
                             <DeleteIcon />
                         </Button>
                     </div>
-                </Grid>
+                </Grid>}
             </Grid>
             {descOpen && <div style={{
                 backgroundColor: "rgb(21, 101, 192)",
