@@ -59,6 +59,8 @@ params:
     userID: int
 returns:
     dictionary containing user data
+
+author: Mitchell
 */
 app.get('/get-user', (req, response) => {
     let userID = req.query.userID
@@ -457,6 +459,8 @@ params:
     userID: int
 returns:
     error or status code 200 if successful
+
+author: Mitchell
 */
 app.post('/delete-user', (req, response) => {
     let userID = req.body.userID
@@ -674,25 +678,6 @@ app.post('/delete-experience', (req, response) => {
     })
 })
 
-/*
- params:
-     userID: int
- returns:
-     error or status code 200 if successful
- */
- app.post('/delete-user', (req, response) => {
-     let userID = req.body.userID
-     let query = `DELETE FROM USERS WHERE USER_ID = $1`
-     pool.query(query, [userID], (err, res) => {
-         if (err) {
-             response.json({ err: err })
-             console.log(err)
-             return
-         }
-         response.sendStatus(200)
-     })
- })
-
  /*
  allows the user to update their own information
 
@@ -705,6 +690,8 @@ app.post('/delete-experience', (req, response) => {
      lname: String
  returns:
      error or status code 200 if successful
+
+author: Mitchell
  */
  app.post('/update-user', (req, response) => {
      let userID = req.body.userID
@@ -725,7 +712,6 @@ app.post('/delete-experience', (req, response) => {
      query += ` WHERE USER_ID = $1`
 
      pool.query(query, [userID], (err, res) => {
-        console.log("here")
          if (err) {
              response.json({ err: err })
              console.log(err)
@@ -749,6 +735,8 @@ app.post('/delete-experience', (req, response) => {
      is_admin: bool
  returns:
      error or status code 200 if successful
+
+author: Mitchell
  */
  app.post('/update-user-admin', (req, response) => {
      let userID = req.body.userID
@@ -772,7 +760,6 @@ app.post('/delete-experience', (req, response) => {
      query = query.slice(0, -1)
      query += ` WHERE USER_ID = $1`
 
-     console.log(query)
      pool.query(query, [userID], (err, res) => {
          if (err) {
              response.json({ err: err })
