@@ -122,7 +122,7 @@ function AppointmentPage() {
     const handleAdminDelete = (aptID) => {
         console.log("handleAdminDelete()", aptID)
         //TODO: send post request, update appointments
-        axios.post("/update-appointment", {
+        axios.post("/delete-appointment", {
             appointmentID: aptID,
         })
             .then(resp => {
@@ -197,7 +197,7 @@ function AppointmentPage() {
                 {!user.isAdmin &&
                     <UserAppointmentList userApts={userApts} />
                 }
-                {user.isAdmin &&
+                {/*user.isAdmin*/ true &&
                     <ExperienceList experiences={experiences} />
                 }
             </AptFuncContext.Provider>

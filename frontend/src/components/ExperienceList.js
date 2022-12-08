@@ -3,6 +3,8 @@ import Experience from "./Experience"
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, FormControl } from "@mui/material"
 import { InputAdornment } from "@mui/material"
 import { AptFuncContext } from "../context/AptFuncContext"
+// added
+import { UserContext } from "../context/UserContext"
 
 export default function ExperienceList(props) {
     const {experiences} = props
@@ -15,6 +17,9 @@ export default function ExperienceList(props) {
         experience_price: "",
         experience_description: "",
     })
+    // added
+    const { user } = useContext(UserContext)
+
 
     const handleOpen = () => {
         setOpen(true)
@@ -77,9 +82,12 @@ export default function ExperienceList(props) {
             textAlign: "center",
             borderRadius: "10px 10px 10px 10px",
         }}>
+            {user.isAdmin &&
             <h3>Edit Experiences &zwnj; &zwnj;
                 <Button onClick={handleOpen} variant="contained" size="small"> add </Button>
             </h3>
+            }
+            {!user.isAdmin && <h3>Experiences</h3>}
 
             {expComponents}
             <Dialog open={open} onClose={handleClose} style={{ width: "100%" }}>
